@@ -1,0 +1,12 @@
+<!-- TODO: Support more device sizes with another values-<size> folder -->
+<resources>
+    <dimen name="small">4dp</dimen>
+    <dimen name="medium">8dp</dimen>
+    <dimen name="standard">16dp</dimen>
+    <dimen name="large">24dp</dimen>
+    <dimen name="xLarge">32dp</dimen>
+
+    <dimen name="explore_item_image">56dp</dimen>
+    <dimen name="explore_next_page_indicator">48dp</dimen>
+    <dimen name="details_map">250dp</dimen>
+</resources>
