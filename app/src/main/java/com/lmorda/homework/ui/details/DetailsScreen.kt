@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -47,6 +48,7 @@ import com.lmorda.homework.ui.theme.HomeworkTheme
 import com.lmorda.homework.ui.theme.sizeDefault
 import com.lmorda.homework.ui.theme.sizeMedium
 import com.lmorda.homework.ui.theme.sizeSmall
+import com.lmorda.homework.ui.theme.sizeXLarge
 import com.lmorda.homework.ui.theme.topAppBarColors
 import java.util.Locale
 
@@ -117,6 +119,7 @@ private fun DetailsScaffold(
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
+                            modifier = Modifier.size(sizeXLarge),
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             tint = MaterialTheme.colorScheme.onSurface,
                             contentDescription = stringResource(R.string.accessibility_back),
@@ -203,9 +206,11 @@ private fun DetailsItems(vehicle: Vehicle) {
 
 @Composable
 private fun DetailsItem(label: String, value: String) {
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .padding(start = sizeDefault, end = sizeMedium)) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = sizeDefault, end = sizeMedium)
+    ) {
         Text(
             text = label.trim(),
             style = MaterialTheme.typography.bodyLarge,

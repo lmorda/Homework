@@ -4,7 +4,7 @@
     <string name="list_empty">No results found</string>
     <string name="list_error">Having a bit of trouble finding those vehicles!</string>
     <string name="details_error">Having a bit of trouble finding this vehicle!</string>
-    <string name="explore_search_hint">Search…</string>
+    <string name="explore_search_hint">Search</string>
     <string name="label_make">Make</string>
     <string name="label_model">Model</string>
     <string name="label_primary_meter">Primary Meter</string>
@@ -16,5 +16,6 @@
     <string name="label_driver">Driver</string>
     <string name="accessibility_vehicle">Vehicle</string>
     <string name="accessibility_back">Back</string>
+    <string name="accessibility_clear">Clear</string>
     <string name="accessibility_search">Search</string>
 </resources>
