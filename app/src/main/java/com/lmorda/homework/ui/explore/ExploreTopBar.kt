@@ -48,6 +48,7 @@ import com.lmorda.homework.ui.explore.ExploreContract.Event.OnSearchName
 import com.lmorda.homework.ui.theme.DayAndNightPreview
 import com.lmorda.homework.ui.theme.HomeworkTheme
 import com.lmorda.homework.ui.theme.sizeDefault
+import com.lmorda.homework.ui.theme.sizeLarge
 import com.lmorda.homework.ui.theme.sizeXLarge
 import com.lmorda.homework.ui.theme.topAppBarColors
 
@@ -187,23 +188,25 @@ fun ExploreAppBarFiltering(
             }
         )
 
-        IconButton(
-            modifier = Modifier
-                .align(CenterVertically)
-                .padding(end = sizeDefault),
-            onClick = {
-                query = ""
-                onSearch("")
-                keyboardController?.hide()
-                focusManager.clearFocus()
-            },
-        ) {
-            Icon(
-                modifier = Modifier.size(sizeXLarge),
-                imageVector = Icons.Filled.Clear,
-                tint = MaterialTheme.colorScheme.onBackground,
-                contentDescription = stringResource(R.string.accessibility_clear),
-            )
+        if (query.isNotEmpty()) {
+            IconButton(
+                modifier = Modifier
+                    .align(CenterVertically)
+                    .padding(end = sizeDefault),
+                onClick = {
+                    query = ""
+                    onSearch("")
+                    keyboardController?.hide()
+                    focusManager.clearFocus()
+                },
+            ) {
+                Icon(
+                    modifier = Modifier.size(sizeLarge),
+                    imageVector = Icons.Filled.Clear,
+                    tint = MaterialTheme.colorScheme.onBackground,
+                    contentDescription = stringResource(R.string.accessibility_clear),
+                )
+            }
         }
     }
 }
