@@ -169,9 +169,9 @@ private fun DetailsMap(geolocation: Geolocation, date: String) {
 @Composable
 private fun DetailsItems(vehicle: Vehicle) {
     Column {
-        vehicle.currentLocationEntry?.let {
+        vehicle.currentLocationEntry?.takeIf { it.geolocation.latitude != 0.0 }?.let {
             DetailsMap(it.geolocation, it.date)
-        }
+        } ?: Spacer(modifier = Modifier.height(sizeDefault))
         DetailsItem(
             label = stringResource(R.string.label_primary_meter),
             value = "${vehicle.primaryMeterValue} ${vehicle.primaryMeterUnit}",
