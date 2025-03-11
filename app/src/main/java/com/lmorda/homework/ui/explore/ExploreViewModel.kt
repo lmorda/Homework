@@ -10,7 +10,6 @@ import com.lmorda.homework.ui.MviViewModel
 import com.lmorda.homework.ui.explore.ExploreContract.Event
 import com.lmorda.homework.ui.explore.ExploreContract.Event.Internal.OnLoadError
 import com.lmorda.homework.ui.explore.ExploreContract.Event.Internal.OnLoaded
-import com.lmorda.homework.ui.explore.ExploreContract.Event.OnLoadFirstPage
 import com.lmorda.homework.ui.explore.ExploreContract.Event.OnLoadNextPage
 import com.lmorda.homework.ui.explore.ExploreContract.Event.OnRefresh
 import com.lmorda.homework.ui.explore.ExploreContract.Event.OnSearchName
@@ -31,12 +30,11 @@ class ExploreViewModel @Inject constructor(
 
     private var searchJob: Job? = null
 
-    override fun reduce(state: State, event: Event): State = when (event) {
-        OnLoadFirstPage -> {
-            getFirstPage()
-            State.LoadingFirstPage
-        }
+    init {
+        getFirstPage()
+    }
 
+    override fun reduce(state: State, event: Event): State = when (event) {
         is OnLoadNextPage -> {
             if (state is State.Loaded && state.nextCursor != null) {
                 getVehiclePage(
@@ -112,7 +110,9 @@ class ExploreViewModel @Inject constructor(
     private fun getFilteredFirstPage(nameLike: String?) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
-            delay(EXPLORE_FILTER_DEBOUNCE_MILLIS)
+            if (!nameLike.isNullOrBlank()) {
+                delay(EXPLORE_FILTER_DEBOUNCE_MILLIS)
+            }
             try {
                 val vehiclePage = dataRepository.getVehicles(
                     startCursor = null,

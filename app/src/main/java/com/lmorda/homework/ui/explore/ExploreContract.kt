@@ -8,8 +8,6 @@ interface ExploreContract {
 
         data object Initial : State()
 
-        data object LoadingFirstPage : State()
-
         data class Loaded(
             val vehicles: List<Vehicle>,
             val nextCursor: String?,
@@ -30,7 +28,6 @@ interface ExploreContract {
 
     sealed class Event {
 
-        data object OnLoadFirstPage : Event()
         data object OnRefresh : Event()
         data object OnLoadNextPage : Event()
 

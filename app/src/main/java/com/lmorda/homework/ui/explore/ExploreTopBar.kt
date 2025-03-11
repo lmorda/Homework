@@ -29,6 +29,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
@@ -39,8 +40,9 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.lmorda.homework.R
 import com.lmorda.homework.ui.explore.ExploreContract.Event
@@ -69,6 +71,7 @@ internal fun ExploreTopBar(
                         push(OnSearchName(""))
                         isFiltering.value = false
                     },
+                    isFiltering = isFiltering,
                 )
 
                 else -> ExploreAppBarNotFiltering(
@@ -81,7 +84,7 @@ internal fun ExploreTopBar(
 
 @Composable
 internal fun ExploreAppBarNotFiltering(
-    onFilterClick: () -> Unit
+    onFilterClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -114,9 +117,12 @@ internal fun ExploreAppBarNotFiltering(
 @Composable
 fun ExploreAppBarFiltering(
     onBackClick: () -> Unit,
-    onSearch: (String) -> Unit
+    onSearch: (String) -> Unit,
+    isFiltering: MutableState<Boolean>,
 ) {
-    var query by remember { mutableStateOf("") }
+    var searchFieldValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(TextFieldValue(text = ""))
+    }
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -143,10 +149,11 @@ fun ExploreAppBarFiltering(
         }
 
         BasicTextField(
-            value = query,
-            onValueChange = {
-                query = it
-                onSearch(it)
+            value = searchFieldValue,
+            onValueChange = { newValue ->
+                // Update the searchFieldValue, force the cursor to the end
+                searchFieldValue = newValue.copy(selection = TextRange(newValue.text.length))
+                onSearch(newValue.text)
             },
             modifier = Modifier
                 .weight(1f)
@@ -160,23 +167,21 @@ fun ExploreAppBarFiltering(
                 },
             singleLine = true,
             textStyle = MaterialTheme.typography.titleMedium.copy(
-                fontWeight = FontWeight.Normal,
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.onBackground,
             ),
-            cursorBrush = SolidColor(value = MaterialTheme.colorScheme.onBackground),
+            cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Search
             ),
             keyboardActions = KeyboardActions(
                 onSearch = {
-                    onSearch(query)
                     keyboardController?.hide()
                     focusManager.clearFocus()
                 }
             ),
             decorationBox = { innerTextField ->
                 Box(Modifier.fillMaxWidth()) {
-                    if (query.isEmpty()) {
+                    if (searchFieldValue.text.isEmpty()) {
                         Text(
                             text = stringResource(R.string.explore_search_hint),
                             style = MaterialTheme.typography.titleMedium,
@@ -188,16 +193,17 @@ fun ExploreAppBarFiltering(
             }
         )
 
-        if (query.isNotEmpty()) {
+        if (searchFieldValue.text.isNotEmpty()) {
             IconButton(
                 modifier = Modifier
                     .align(CenterVertically)
                     .padding(end = sizeDefault),
                 onClick = {
-                    query = ""
+                    searchFieldValue = TextFieldValue(text = "")
                     onSearch("")
                     keyboardController?.hide()
                     focusManager.clearFocus()
+                    isFiltering.value = false
                 },
             ) {
                 Icon(
@@ -231,6 +237,7 @@ fun ExploreAppBarFilteringPreview() {
             ExploreAppBarFiltering(
                 onBackClick = {},
                 onSearch = {},
+                isFiltering = remember { mutableStateOf(true) },
             )
         }
     }

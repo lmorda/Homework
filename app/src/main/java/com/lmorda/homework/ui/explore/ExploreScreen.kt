@@ -22,14 +22,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -41,7 +42,6 @@ import com.lmorda.homework.R
 import com.lmorda.homework.domain.model.Vehicle
 import com.lmorda.homework.domain.model.mockDomainData
 import com.lmorda.homework.ui.explore.ExploreContract.Event
-import com.lmorda.homework.ui.explore.ExploreContract.Event.OnLoadFirstPage
 import com.lmorda.homework.ui.explore.ExploreContract.State
 import com.lmorda.homework.ui.shared.HomeworkLoadingError
 import com.lmorda.homework.ui.shared.HomeworkProgressIndicator
@@ -57,9 +57,6 @@ fun ExploreScreenRoute(
     viewModel: ExploreViewModel,
     onNavigateToDetails: (Long) -> Unit,
 ) {
-    LaunchedEffect(Unit) {
-        viewModel.push(OnLoadFirstPage)
-    }
     val state = requireNotNull(viewModel.state.observeAsState().value)
     ExploreScreen(
         state = state,
@@ -76,7 +73,7 @@ internal fun ExploreScreen(
     onNavigateToDetails: (Long) -> Unit,
 ) {
     val listState = rememberLazyListState()
-    val isFiltering = remember { mutableStateOf(false) }
+    val isFiltering = rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -117,8 +114,7 @@ private fun ExploreContent(
     push: (Event) -> Unit
 ) {
     when (state) {
-        is State.Initial -> {}
-        is State.LoadingFirstPage, State.LoadingRefresh -> HomeworkProgressIndicator()
+        is State.Initial, State.LoadingRefresh -> HomeworkProgressIndicator()
         is State.LoadingPage -> {
             ExploreList(
                 listState = listState,
@@ -176,11 +172,15 @@ private fun ExploreList(
 
 @Composable
 private fun ExploreItem(vehicle: Vehicle, onNavigateToDetails: (Long) -> Unit) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
     Row(
         verticalAlignment = CenterVertically,
         modifier = Modifier
             .padding(all = sizeMedium)
             .clickable {
+                keyboardController?.hide()
+                focusManager.clearFocus()
                 onNavigateToDetails(vehicle.id)
             },
     ) {
