@@ -14,9 +14,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -29,7 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -51,6 +50,7 @@ import com.lmorda.homework.ui.theme.HomeworkTheme
 import com.lmorda.homework.ui.theme.PaginationEffect
 import com.lmorda.homework.ui.theme.sizeDefault
 import com.lmorda.homework.ui.theme.sizeMedium
+import com.lmorda.homework.ui.theme.sizeSmall
 
 @Composable
 fun ExploreScreenRoute(
@@ -80,8 +80,16 @@ internal fun ExploreScreen(
 
     Scaffold(
         topBar = {
-            // TODO: Add sorting pills
-            ExploreTopBar(isFiltering = isFiltering, push = push)
+            Column {
+                ExploreTopBar(
+                    isFiltering = isFiltering,
+                    push = push,
+                )
+                HorizontalDivider(
+                    modifier = Modifier.padding(bottom = sizeSmall),
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.15f)
+                )
+            }
         },
     ) { paddingValues ->
         PullToRefreshBox(
@@ -178,8 +186,7 @@ private fun ExploreItem(vehicle: Vehicle, onNavigateToDetails: (Long) -> Unit) {
     ) {
         AsyncImage(
             modifier = Modifier
-                .size(size = dimensionResource(R.dimen.explore_item_image))
-                .clip(shape = CircleShape),
+                .size(size = dimensionResource(R.dimen.explore_item_image)),
             model = ImageRequest.Builder(LocalContext.current)
                 .data(vehicle.defaultImageUrlSmall)
                 .crossfade(true)

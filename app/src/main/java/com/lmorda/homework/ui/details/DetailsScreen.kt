@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +23,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -30,8 +32,8 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.lmorda.homework.R
-import com.lmorda.homework.domain.model.CurrentLocationEntry
 import com.lmorda.homework.domain.model.Driver
+import com.lmorda.homework.domain.model.Geolocation
 import com.lmorda.homework.domain.model.Vehicle
 import com.lmorda.homework.domain.model.mockDomainData
 import com.lmorda.homework.ui.details.DetailsContract.Event.OnLoadDetails
@@ -43,7 +45,6 @@ import com.lmorda.homework.ui.shared.Utils
 import com.lmorda.homework.ui.theme.DayAndNightPreview
 import com.lmorda.homework.ui.theme.HomeworkTheme
 import com.lmorda.homework.ui.theme.sizeDefault
-import com.lmorda.homework.ui.theme.sizeLarge
 import com.lmorda.homework.ui.theme.sizeMedium
 import com.lmorda.homework.ui.theme.sizeSmall
 import com.lmorda.homework.ui.theme.topAppBarColors
@@ -122,14 +123,12 @@ private fun DetailsScaffold(
                         )
                     }
                 },
-                // TODO: Add EDIT action button to update vehicle
             )
         }
     ) { contentPadding ->
         Column(
             modifier = Modifier
                 .padding(paddingValues = contentPadding)
-                .padding(horizontal = sizeLarge)
                 .fillMaxSize()
         ) {
             screenContent()
@@ -138,10 +137,10 @@ private fun DetailsScaffold(
 }
 
 @Composable
-private fun DetailsMap(currentLocationEntry: CurrentLocationEntry) {
+private fun DetailsMap(geolocation: Geolocation, date: String) {
     val location = LatLng(
-        currentLocationEntry.geolocation.latitude,
-        currentLocationEntry.geolocation.longitude,
+        geolocation.latitude,
+        geolocation.longitude,
     )
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(location, MAP_DEFAULT_ZOOM)
@@ -157,7 +156,7 @@ private fun DetailsMap(currentLocationEntry: CurrentLocationEntry) {
             state = MarkerState(position = location),
             title = location.toString(),
             snippet = Utils.formatDateTime(
-                dateTime = currentLocationEntry.date,
+                dateTime = date,
                 locale = Locale.getDefault(),
             )
         )
@@ -168,40 +167,33 @@ private fun DetailsMap(currentLocationEntry: CurrentLocationEntry) {
 private fun DetailsItems(vehicle: Vehicle) {
     Column {
         vehicle.currentLocationEntry?.let {
-            DetailsMap(currentLocationEntry = it)
+            DetailsMap(it.geolocation, it.date)
         }
-        DetailsItem(
-            label = stringResource(R.string.label_driver),
-            value = vehicle.driver?.fullName.orEmpty(),
-        )
-        DetailsItem(
-            label = stringResource(R.string.label_make),
-            value = vehicle.make,
-        )
-        DetailsItem(
-            label = stringResource(R.string.label_model),
-            value = vehicle.model,
-        )
         DetailsItem(
             label = stringResource(R.string.label_primary_meter),
             value = "${vehicle.primaryMeterValue} ${vehicle.primaryMeterUnit}",
         )
+        HorizontalDivider(modifier = Modifier.padding(vertical = sizeDefault))
         DetailsItem(
             label = stringResource(R.string.label_secondary_meter),
             value = "${vehicle.secondaryMeterValue} ${vehicle.secondaryMeterUnit}",
         )
-        DetailsItem(
-            label = stringResource(R.string.label_vehicle_type),
-            value = vehicle.vehicleTypeName,
-        )
+        HorizontalDivider(modifier = Modifier.padding(vertical = sizeDefault))
         DetailsItem(
             label = stringResource(R.string.label_vehicle_status),
             value = vehicle.vehicleStatusName,
         )
+        HorizontalDivider(modifier = Modifier.padding(vertical = sizeDefault))
+        DetailsItem(
+            label = stringResource(R.string.label_driver),
+            value = vehicle.driver?.fullName.orEmpty(),
+        )
+        HorizontalDivider(modifier = Modifier.padding(vertical = sizeDefault))
         DetailsItem(
             label = stringResource(R.string.label_vin),
             value = vehicle.vin,
         )
+        HorizontalDivider(modifier = Modifier.padding(vertical = sizeDefault))
         DetailsItem(
             label = stringResource(R.string.label_license_plate),
             value = vehicle.licensePlate,
@@ -211,10 +203,12 @@ private fun DetailsItems(vehicle: Vehicle) {
 
 @Composable
 private fun DetailsItem(label: String, value: String) {
-    Row(modifier = Modifier.fillMaxWidth().padding(top = sizeMedium)) {
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .padding(start = sizeDefault, end = sizeMedium)) {
         Text(
             text = label.trim(),
-            style = MaterialTheme.typography.labelLarge,
+            style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onBackground,
             maxLines = 1,
         )
@@ -223,6 +217,7 @@ private fun DetailsItem(label: String, value: String) {
             modifier = Modifier.padding(start = sizeSmall),
             text = value.trim(),
             style = MaterialTheme.typography.bodyLarge,
+            fontWeight = FontWeight.Light,
             color = MaterialTheme.colorScheme.onBackground,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
