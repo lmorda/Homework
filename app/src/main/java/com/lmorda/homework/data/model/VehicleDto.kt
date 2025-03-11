@@ -9,19 +9,19 @@ data class VehicleDto(
     val id: Long,
 
     @SerialName("name")
-    val name: String,
+    val name: String? = null,
 
     @SerialName("vehicle_type_name")
-    val vehicleTypeName: String,
+    val vehicleTypeName: String? = null,
 
     @SerialName("vehicle_status_name")
-    val vehicleStatusName: String,
+    val vehicleStatusName: String? = null,
 
     @SerialName("primary_meter_value")
-    val primaryMeterValue: String,
+    val primaryMeterValue: String? = null,
 
     @SerialName("primary_meter_unit")
-    val primaryMeterUnit: String,
+    val primaryMeterUnit: String? = null,
 
     @SerialName("secondary_meter_value")
     val secondaryMeterValue: String? = null,

@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 data class GeolocationDto(
 
     @SerialName("latitude")
-    val latitude: Double,
+    val latitude: Double? = null,
 
     @SerialName("longitude")
-    val longitude: Double,
+    val longitude: Double? = null,
 )

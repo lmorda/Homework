@@ -30,18 +30,18 @@ class DataMapper @Inject constructor() {
     fun map(vehicleDto: VehicleDto) = with(vehicleDto) {
         Vehicle(
             id = id,
-            name = name,
+            name = name.orEmpty(),
             make = make.orEmpty(),
             model = model.orEmpty(),
-            vehicleTypeName = vehicleTypeName,
-            vehicleStatusName = vehicleStatusName,
-            primaryMeterValue = primaryMeterValue,
-            primaryMeterUnit = primaryMeterUnit,
-            secondaryMeterValue = secondaryMeterValue.orEmpty(),
+            vehicleTypeName = vehicleTypeName.orEmpty(),
+            vehicleStatusName = vehicleStatusName.orEmpty(),
+            primaryMeterValue = primaryMeterValue.orEmpty(),
+            primaryMeterUnit = primaryMeterUnit.orEmpty(),
+            secondaryMeterValue = secondaryMeterValue?.takeIf { it != "0.0" }.orEmpty(),
             secondaryMeterUnit = secondaryMeterUnit.orEmpty(),
             vin = vin.orEmpty(),
             licensePlate = licensePlate.orEmpty(),
-            defaultImageUrlSmall = defaultImageUrlSmall,
+            defaultImageUrlSmall = defaultImageUrlSmall.orEmpty(),
             currentLocationEntry = currentLocationEntry?.let { map(it) },
             driver = driver?.let { map(it) },
         )
@@ -67,20 +67,21 @@ class DataMapper @Inject constructor() {
     private fun map(currentLocationEntryDto: CurrentLocationEntryDto) =
         with(currentLocationEntryDto) {
             CurrentLocationEntry(
-                date = date,
-                geolocation = map(geolocation),
+                date = date.orEmpty(),
+                geolocation = geolocation?.let { map(it) }
+                    ?: Geolocation(0.0, 0.0),
             )
         }
 
     private fun map(geolocation: GeolocationDto) = with(geolocation) {
         Geolocation(
-            latitude = latitude,
-            longitude = longitude,
+            latitude = latitude ?: 0.0,
+            longitude = longitude ?: 0.0,
         )
     }
 
     private fun map(driverDto: DriverDto) = with(driverDto) {
-        Driver(fullName = fullName)
+        Driver(fullName = fullName.orEmpty())
     }
 
     fun map(sort: VehicleSort) = when (sort) {

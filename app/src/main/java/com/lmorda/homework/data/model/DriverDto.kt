@@ -7,5 +7,5 @@ import kotlinx.serialization.Serializable
 data class DriverDto(
 
     @SerialName("full_name")
-    val fullName: String,
+    val fullName: String? = null,
 )

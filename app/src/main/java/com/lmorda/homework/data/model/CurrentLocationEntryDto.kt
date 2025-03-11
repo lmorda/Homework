@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 data class CurrentLocationEntryDto(
 
     @SerialName("date")
-    val date: String,
+    val date: String? = null,
 
     @SerialName("geolocation")
-    val geolocation: GeolocationDto,
+    val geolocation: GeolocationDto? = null,
 )

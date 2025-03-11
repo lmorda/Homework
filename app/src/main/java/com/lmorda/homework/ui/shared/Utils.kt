@@ -9,10 +9,11 @@ import java.util.Locale
 const val MMMddyyyyhhmma = "MMM dd, yyyy hh:mm a"
 
 object Utils {
-    fun formatDateTime(dateTime: String, locale: Locale): String {
+    fun formatDateTime(dateTime: String?, locale: Locale): String {
+        if (dateTime == null) return ""
         return try {
             OffsetDateTime.parse(dateTime, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
-                .format(DateTimeFormatter.ofPattern(MMMddyyyyhhmma))
+                .format(DateTimeFormatter.ofPattern(MMMddyyyyhhmma, locale))
         } catch (e: DateTimeParseException) {
             Timber.w(e)
             ""

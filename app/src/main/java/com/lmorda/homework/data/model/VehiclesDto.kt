@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class VehiclesDto(
     @SerialName("next_cursor")
-    val nextCursor: String?,
+    val nextCursor: String? = null,
 
     @SerialName("per_page")
     val perPage: Int,
