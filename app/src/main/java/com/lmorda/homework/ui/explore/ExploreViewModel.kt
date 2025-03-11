@@ -1,6 +1,7 @@
 package com.lmorda.homework.ui.explore
 
 import androidx.lifecycle.viewModelScope
+import com.lmorda.homework.data.api.EXPLORE_FILTER_DEBOUNCE_MILLIS
 import com.lmorda.homework.domain.DataRepository
 import com.lmorda.homework.domain.filters.VehicleFilter
 import com.lmorda.homework.domain.filters.VehicleSort
@@ -15,8 +16,11 @@ import com.lmorda.homework.ui.explore.ExploreContract.Event.OnRefresh
 import com.lmorda.homework.ui.explore.ExploreContract.Event.OnSearchName
 import com.lmorda.homework.ui.explore.ExploreContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
 
 @HiltViewModel
 class ExploreViewModel @Inject constructor(
@@ -24,6 +28,8 @@ class ExploreViewModel @Inject constructor(
 ) : MviViewModel<State, Event>(
     initialState = State.Initial,
 ) {
+
+    private var searchJob: Job? = null
 
     override fun reduce(state: State, event: Event): State = when (event) {
         OnLoadFirstPage -> {
@@ -104,7 +110,9 @@ class ExploreViewModel @Inject constructor(
 
 
     private fun getFilteredFirstPage(nameLike: String?) {
-        viewModelScope.launch {
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            delay(EXPLORE_FILTER_DEBOUNCE_MILLIS)
             try {
                 val vehiclePage = dataRepository.getVehicles(
                     startCursor = null,
@@ -121,6 +129,7 @@ class ExploreViewModel @Inject constructor(
                     )
                 )
             } catch (e: Exception) {
+                if (e is CancellationException) throw e
                 push(OnLoadError(errorMessage = e.message))
             }
         }

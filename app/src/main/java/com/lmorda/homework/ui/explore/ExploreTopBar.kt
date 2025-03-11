@@ -15,6 +15,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -38,6 +39,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.lmorda.homework.R
@@ -46,8 +48,6 @@ import com.lmorda.homework.ui.explore.ExploreContract.Event.OnSearchName
 import com.lmorda.homework.ui.theme.DayAndNightPreview
 import com.lmorda.homework.ui.theme.HomeworkTheme
 import com.lmorda.homework.ui.theme.sizeDefault
-import com.lmorda.homework.ui.theme.sizeLarge
-import com.lmorda.homework.ui.theme.sizeSmall
 import com.lmorda.homework.ui.theme.sizeXLarge
 import com.lmorda.homework.ui.theme.topAppBarColors
 
@@ -127,15 +127,14 @@ fun ExploreAppBarFiltering(
     Row(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.background)
-            .padding(horizontal = sizeSmall),
+            .background(color = MaterialTheme.colorScheme.background),
     ) {
         IconButton(
             modifier = Modifier.align(CenterVertically),
             onClick = onBackClick,
         ) {
             Icon(
-                modifier = Modifier.size(sizeLarge),
+                modifier = Modifier.size(sizeXLarge),
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 tint = MaterialTheme.colorScheme.onSurface,
                 contentDescription = stringResource(R.string.accessibility_back),
@@ -149,6 +148,7 @@ fun ExploreAppBarFiltering(
                 onSearch(it)
             },
             modifier = Modifier
+                .weight(1f)
                 .align(CenterVertically)
                 .background(color = MaterialTheme.colorScheme.background)
                 .focusRequester(focusRequester)
@@ -158,7 +158,8 @@ fun ExploreAppBarFiltering(
                     }
                 },
             singleLine = true,
-            textStyle = MaterialTheme.typography.bodyLarge.copy(
+            textStyle = MaterialTheme.typography.titleMedium.copy(
+                fontWeight = FontWeight.Normal,
                 color = MaterialTheme.colorScheme.onBackground
             ),
             cursorBrush = SolidColor(value = MaterialTheme.colorScheme.onBackground),
@@ -177,14 +178,33 @@ fun ExploreAppBarFiltering(
                     if (query.isEmpty()) {
                         Text(
                             text = stringResource(R.string.explore_search_hint),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onBackground,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.25f),
                         )
                     }
                     innerTextField()
                 }
             }
         )
+
+        IconButton(
+            modifier = Modifier
+                .align(CenterVertically)
+                .padding(end = sizeDefault),
+            onClick = {
+                query = ""
+                onSearch("")
+                keyboardController?.hide()
+                focusManager.clearFocus()
+            },
+        ) {
+            Icon(
+                modifier = Modifier.size(sizeXLarge),
+                imageVector = Icons.Filled.Clear,
+                tint = MaterialTheme.colorScheme.onBackground,
+                contentDescription = stringResource(R.string.accessibility_clear),
+            )
+        }
     }
 }
 
