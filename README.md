@@ -26,15 +26,14 @@ The app fetches a list of Fleetio vehicles from the [Fleetio API](https://develo
 
 **Paging:** I implemented a custom paging solution instead of using the Paging 3 library because each item only handles a small amount of data, and in my experience the Android Paging libraries can be difficult to squeeze into a true clean architecture.
 
-**Assumptions:** I've made some DTO nullability decisions that could probably be improved. I've also locked the app to portrait orientation since my last two companies have used this mode, and I've noticed that Fleetio Go also operates in portrait mode.
+**Assumptions:** I've locked the app to portrait orientation since my last two companies have used this mode, and I've noticed that Fleetio Go also operates in portrait mode.
 
-**Future Improvements:** Additional unit tests and screenshot tests could enhance the project.  There are TODOs throughout to illustrate what I could have accomplished given more time. 
+**Future Improvements:** Additional unit tests and screenshot tests could enhance the project.  There are TODOs throughout to illustrate what I could have accomplished given more time.  Updating fields on the vehicle and displaying list of comments for the vehicle could still be added. And the explore search functionality could be cleaned up as well.
 
 ## Clean Architecture
 
 This project adheres to clean architecture principles to ensure clear separation of concerns. The data and UI layers are
-fully decoupled, with the domain layer serving as the intermediary.  Note: UseCases were not utilized in this project due to its small scope, and they
-should only be used for complex domain logic that most apps will not need.
+fully decoupled, with the domain layer serving as the intermediary.  
 
 <img width="1316" alt="CleanArchitecture" src="https://github.com/user-attachments/assets/8ff5fbff-b7b0-481e-b424-396d7e9d3353" />
 
