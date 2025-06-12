@@ -119,8 +119,10 @@ internal fun ExploreAppBarNotFiltering(
         }
         if (showContacts) {
             IconButton(
-                modifier = Modifier.align(CenterVertically).testTag(UiTestTags.SHOW_ICON),
-                onClick = onFilterClick,
+                modifier = Modifier
+                    .align(CenterVertically)
+                    .testTag(UiTestTags.SHOW_ICON),
+                onClick = { },
             ) {
                 Icon(
                     modifier = Modifier.size(sizeXLarge),
