@@ -16,6 +16,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -39,6 +40,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
@@ -47,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import com.lmorda.homework.R
 import com.lmorda.homework.ui.explore.ExploreContract.Event
 import com.lmorda.homework.ui.explore.ExploreContract.Event.OnSearchName
+import com.lmorda.homework.ui.shared.UiTestTags
 import com.lmorda.homework.ui.theme.DayAndNightPreview
 import com.lmorda.homework.ui.theme.HomeworkTheme
 import com.lmorda.homework.ui.theme.sizeDefault
@@ -58,6 +61,7 @@ import com.lmorda.homework.ui.theme.topAppBarColors
 @Composable
 internal fun ExploreTopBar(
     isFiltering: MutableState<Boolean>,
+    showContacts: Boolean,
     push: (Event) -> Unit,
 ) {
     TopAppBar(
@@ -75,6 +79,7 @@ internal fun ExploreTopBar(
                 )
 
                 else -> ExploreAppBarNotFiltering(
+                    showContacts = showContacts,
                     onFilterClick = { isFiltering.value = true },
                 )
             }
@@ -84,6 +89,7 @@ internal fun ExploreTopBar(
 
 @Composable
 internal fun ExploreAppBarNotFiltering(
+    showContacts: Boolean,
     onFilterClick: () -> Unit,
 ) {
     Row(
@@ -110,6 +116,21 @@ internal fun ExploreAppBarNotFiltering(
                 tint = MaterialTheme.colorScheme.onSurface,
                 contentDescription = stringResource(R.string.accessibility_search),
             )
+        }
+        if (showContacts) {
+            IconButton(
+                modifier = Modifier
+                    .align(CenterVertically)
+                    .testTag(UiTestTags.SHOW_ICON),
+                onClick = { },
+            ) {
+                Icon(
+                    modifier = Modifier.size(sizeXLarge),
+                    imageVector = Icons.Default.Person,
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    contentDescription = stringResource(R.string.accessibility_search),
+                )
+            }
         }
     }
 }
@@ -223,6 +244,7 @@ fun ExploreAppBarNotFilteringPreview() {
     HomeworkTheme {
         Column(modifier = Modifier.height(64.dp)) {
             ExploreAppBarNotFiltering(
+                showContacts = false,
                 onFilterClick = {},
             )
         }
