@@ -11,6 +11,7 @@ class FeatureFlagRepositoryImpl @Inject constructor() : FeatureFlagRepository {
         emit(
             when (flagName) {
                 FeatureFlag.Placeholder -> false
+                FeatureFlag.ShowContacts -> true
             }
         )
     }

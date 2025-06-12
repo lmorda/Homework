@@ -22,6 +22,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -58,10 +60,12 @@ fun ExploreScreenRoute(
     onNavigateToDetails: (Long) -> Unit,
 ) {
     val state = requireNotNull(viewModel.state.observeAsState().value)
+    val showContacts by viewModel.showContacts.collectAsState()
     ExploreScreen(
         state = state,
         push = viewModel::push,
         onNavigateToDetails = onNavigateToDetails,
+        showContacts = showContacts,
     )
 }
 
@@ -71,6 +75,7 @@ internal fun ExploreScreen(
     state: State,
     push: (Event) -> Unit,
     onNavigateToDetails: (Long) -> Unit,
+    showContacts: Boolean,
 ) {
     val listState = rememberLazyListState()
     val isFiltering = rememberSaveable { mutableStateOf(false) }
@@ -80,6 +85,7 @@ internal fun ExploreScreen(
             Column {
                 ExploreTopBar(
                     isFiltering = isFiltering,
+                    showContacts = showContacts,
                     push = push,
                 )
                 HorizontalDivider(
@@ -256,6 +262,7 @@ private fun ExploreScreenPreview() {
             ),
             push = {},
             onNavigateToDetails = {},
+            showContacts = true,
         )
     }
 }

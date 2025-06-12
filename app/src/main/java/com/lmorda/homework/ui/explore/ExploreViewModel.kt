@@ -3,6 +3,8 @@ package com.lmorda.homework.ui.explore
 import androidx.lifecycle.viewModelScope
 import com.lmorda.homework.data.api.EXPLORE_FILTER_DEBOUNCE_MILLIS
 import com.lmorda.homework.domain.DataRepository
+import com.lmorda.homework.domain.featureflag.FeatureFlag
+import com.lmorda.homework.domain.featureflag.FeatureFlagRepository
 import com.lmorda.homework.domain.filters.VehicleFilter
 import com.lmorda.homework.domain.filters.VehicleSort
 import com.lmorda.homework.domain.model.Vehicle
@@ -17,6 +19,10 @@ import com.lmorda.homework.ui.explore.ExploreContract.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
@@ -24,13 +30,18 @@ import kotlin.coroutines.cancellation.CancellationException
 @HiltViewModel
 class ExploreViewModel @Inject constructor(
     private val dataRepository: DataRepository,
+    private val featureFlagRepository: FeatureFlagRepository,
 ) : MviViewModel<State, Event>(
     initialState = State.Initial,
 ) {
 
+    private val _showContacts = MutableStateFlow(false)
+    val showContacts: StateFlow<Boolean> = _showContacts.asStateFlow()
+
     private var searchJob: Job? = null
 
     init {
+        getFeatureFlags()
         getFirstPage()
     }
 
@@ -106,7 +117,6 @@ class ExploreViewModel @Inject constructor(
         }
     }
 
-
     private fun getFilteredFirstPage(nameLike: String?) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
@@ -131,6 +141,14 @@ class ExploreViewModel @Inject constructor(
             } catch (e: Exception) {
                 if (e is CancellationException) throw e
                 push(OnLoadError(errorMessage = e.message))
+            }
+        }
+    }
+
+    private fun getFeatureFlags() {
+        viewModelScope.launch {
+            featureFlagRepository.isFeatureEnabled(FeatureFlag.ShowContacts).collectLatest { showContacts ->
+                _showContacts.value = showContacts
             }
         }
     }
