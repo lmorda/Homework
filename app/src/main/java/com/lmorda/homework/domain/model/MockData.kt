@@ -74,3 +74,66 @@ val mockDomainData = Vehicles(
         ),
     )
 )
+
+val mockContactsDomainData = listOf(
+    Contact(
+        name = "Lou Morda",
+        email = "lmorda81@gmail.com",
+        defaultImageUrl = "https://d8g9nhlfs6lwh.cloudfront.net/UzeF59YQ6GVHLP2qKeNg?signature=abc123",
+        createdAt = "2025-03-05T11:13:10.612-08:00"
+    ),
+    Contact(
+        name = "Kate Morda",
+        email = "Kate.Morda@gmail.com",
+        defaultImageUrl = null,
+        createdAt = "2025-03-06T08:02:36.482-08:00"
+    ),
+    Contact(
+        name = "Jane Doe",
+        email = "jane.doe@example.com",
+        defaultImageUrl = "https://example.com/image1.jpg",
+        createdAt = "2025-01-15T09:21:34.000-08:00"
+    ),
+    Contact(
+        name = "John Smith",
+        email = "john.smith@example.com",
+        defaultImageUrl = null,
+        createdAt = "2025-02-10T14:45:12.000-08:00"
+    ),
+    Contact(
+        name = "Emily Johnson",
+        email = "emily.johnson@example.com",
+        defaultImageUrl = "https://example.com/image2.jpg",
+        createdAt = "2025-04-01T12:34:56.000-08:00"
+    ),
+    Contact(
+        name = "Michael Brown",
+        email = "michael.brown@example.com",
+        defaultImageUrl = null,
+        createdAt = "2025-03-12T16:10:22.000-08:00"
+    ),
+    Contact(
+        name = "Sophia Davis",
+        email = "sophia.davis@example.com",
+        defaultImageUrl = "https://example.com/image3.jpg",
+        createdAt = "2025-03-22T10:05:47.000-08:00"
+    ),
+    Contact(
+        name = "William Wilson",
+        email = "william.wilson@example.com",
+        defaultImageUrl = null,
+        createdAt = "2025-02-28T11:15:30.000-08:00"
+    ),
+    Contact(
+        name = "Olivia Martinez",
+        email = "olivia.martinez@example.com",
+        defaultImageUrl = "https://example.com/image4.jpg",
+        createdAt = "2025-03-18T13:50:18.000-08:00"
+    ),
+    Contact(
+        name = "James Taylor",
+        email = "james.taylor@example.com",
+        defaultImageUrl = null,
+        createdAt = "2025-04-02T15:25:40.000-08:00"
+    )
+)

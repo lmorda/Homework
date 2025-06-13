@@ -58,6 +58,7 @@ import com.lmorda.homework.ui.theme.sizeSmall
 fun ExploreScreenRoute(
     viewModel: ExploreViewModel,
     onNavigateToDetails: (Long) -> Unit,
+    onNavigateToContacts: () -> Unit,
 ) {
     val state = requireNotNull(viewModel.state.observeAsState().value)
     val showContacts by viewModel.showContacts.collectAsState()
@@ -65,6 +66,7 @@ fun ExploreScreenRoute(
         state = state,
         push = viewModel::push,
         onNavigateToDetails = onNavigateToDetails,
+        onNavigateToContacts = onNavigateToContacts,
         showContacts = showContacts,
     )
 }
@@ -75,6 +77,7 @@ internal fun ExploreScreen(
     state: State,
     push: (Event) -> Unit,
     onNavigateToDetails: (Long) -> Unit,
+    onNavigateToContacts: () -> Unit,
     showContacts: Boolean,
 ) {
     val listState = rememberLazyListState()
@@ -87,6 +90,7 @@ internal fun ExploreScreen(
                     isFiltering = isFiltering,
                     showContacts = showContacts,
                     push = push,
+                    onNavigateToContacts = onNavigateToContacts,
                 )
                 HorizontalDivider(
                     modifier = Modifier.padding(bottom = sizeSmall),
@@ -262,6 +266,7 @@ private fun ExploreScreenPreview() {
             ),
             push = {},
             onNavigateToDetails = {},
+            onNavigateToContacts = {},
             showContacts = true,
         )
     }

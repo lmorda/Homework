@@ -7,6 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.lmorda.homework.ui.contacts.ContactsScreenRoute
 import com.lmorda.homework.ui.details.DetailsScreenRoute
 import com.lmorda.homework.ui.explore.ExploreScreenRoute
 
@@ -14,6 +15,7 @@ const val routeExplore = "explore"
 const val routeDetailsBase = "details"
 const val argDetailsId = "id"
 const val routeDetailsFull = "$routeDetailsBase/{$argDetailsId}"
+const val routeContacts = "contacts"
 
 @Composable
 internal fun HomeworkNavHost(navController: NavHostController) {
@@ -27,6 +29,9 @@ internal fun HomeworkNavHost(navController: NavHostController) {
                 onNavigateToDetails = { id ->
                     navController.navigate("$routeDetailsBase/$id")
                 },
+                onNavigateToContacts = {
+                    navController.navigate(routeContacts)
+                },
             )
         }
         composable(
@@ -37,6 +42,13 @@ internal fun HomeworkNavHost(navController: NavHostController) {
         ) {
             DetailsScreenRoute(
                 viewModel = hiltViewModel(),
+                onBack = {
+                    navController.navigateUp()
+                },
+            )
+        }
+        composable(route = routeContacts) {
+            ContactsScreenRoute(
                 onBack = {
                     navController.navigateUp()
                 },

@@ -7,16 +7,23 @@ import java.time.format.DateTimeParseException
 import java.util.Locale
 
 const val MMMddyyyyhhmma = "MMM dd, yyyy hh:mm a"
+const val MMMddyyyy = "MMM dd, yyyy"
 
 object Utils {
-    fun formatDateTime(dateTime: String?, locale: Locale): String {
+    private fun formatDateTime(dateTime: String?, pattern: String, locale: Locale): String {
         if (dateTime == null) return ""
         return try {
             OffsetDateTime.parse(dateTime, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
-                .format(DateTimeFormatter.ofPattern(MMMddyyyyhhmma, locale))
+                .format(DateTimeFormatter.ofPattern(pattern, locale))
         } catch (e: DateTimeParseException) {
             Timber.w(e)
             ""
         }
     }
+
+    fun formatDateTimeMonthDayYearTime(dateTime: String?, locale: Locale): String =
+        formatDateTime(dateTime, MMMddyyyyhhmma, locale)
+
+    fun formatDateTimeMonthDayYear(dateTime: String?, locale: Locale): String =
+        formatDateTime(dateTime, MMMddyyyy, locale)
 }
