@@ -158,7 +158,7 @@ private fun DetailsMap(geolocation: Geolocation, date: String) {
         Marker(
             state = MarkerState(position = location),
             title = location.toString(),
-            snippet = Utils.formatDateTime(
+            snippet = Utils.formatDateTimeMonthDayYearTime(
                 dateTime = date,
                 locale = Locale.getDefault(),
             )

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Homework</string>
     <string name="explore_title">Vehicles</string>
+    <string name="contacts_title">Contacts</string>
     <string name="list_empty">No results found</string>
     <string name="list_error">Having a bit of trouble finding those vehicles!</string>
     <string name="details_error">Having a bit of trouble finding this vehicle!</string>
@@ -15,7 +16,9 @@
     <string name="label_license_plate">License Plate</string>
     <string name="label_driver">Driver</string>
     <string name="accessibility_vehicle">Vehicle</string>
+    <string name="accessibility_contact">Contact</string>
     <string name="accessibility_back">Back</string>
     <string name="accessibility_clear">Clear</string>
     <string name="accessibility_search">Search</string>
+    <string name="added">Added</string>
 </resources>

@@ -62,6 +62,7 @@ import com.lmorda.homework.ui.theme.topAppBarColors
 internal fun ExploreTopBar(
     isFiltering: MutableState<Boolean>,
     showContacts: Boolean,
+    onNavigateToContacts: () -> Unit,
     push: (Event) -> Unit,
 ) {
     TopAppBar(
@@ -81,6 +82,7 @@ internal fun ExploreTopBar(
                 else -> ExploreAppBarNotFiltering(
                     showContacts = showContacts,
                     onFilterClick = { isFiltering.value = true },
+                    onNavigateToContacts = onNavigateToContacts,
                 )
             }
         },
@@ -91,6 +93,7 @@ internal fun ExploreTopBar(
 internal fun ExploreAppBarNotFiltering(
     showContacts: Boolean,
     onFilterClick: () -> Unit,
+    onNavigateToContacts: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -122,7 +125,7 @@ internal fun ExploreAppBarNotFiltering(
                 modifier = Modifier
                     .align(CenterVertically)
                     .testTag(UiTestTags.SHOW_ICON),
-                onClick = { },
+                onClick = onNavigateToContacts,
             ) {
                 Icon(
                     modifier = Modifier.size(sizeXLarge),
@@ -246,6 +249,7 @@ fun ExploreAppBarNotFilteringPreview() {
             ExploreAppBarNotFiltering(
                 showContacts = false,
                 onFilterClick = {},
+                onNavigateToContacts = {},
             )
         }
     }
