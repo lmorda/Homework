@@ -8,7 +8,12 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.dagger.hilt)
 }
-
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
+    compilerOptions {
+        allWarningsAsErrors.set(true)
+        freeCompilerArgs.add("-Xsuppress-version-warnings")
+    }
+}
 android {
     namespace = "com.lmorda.homework"
     compileSdk = 35
