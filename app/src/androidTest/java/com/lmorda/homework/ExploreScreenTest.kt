@@ -27,6 +27,7 @@ class ExploreScreenTest {
                 ),
                 push = {},
                 onNavigateToDetails = {},
+                onNavigateToContacts = {},
                 showContacts = false,
             )
         }
@@ -47,6 +48,7 @@ class ExploreScreenTest {
                 ),
                 push = {},
                 onNavigateToDetails = {},
+                onNavigateToContacts = {},
                 showContacts = true,
             )
         }

@@ -1,9 +1,15 @@
 package com.lmorda.homework
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import com.lmorda.homework.domain.model.mockContactsDomainDataPage1
+import com.lmorda.homework.ui.contacts.ContactsContract
 import com.lmorda.homework.ui.contacts.ContactsScreen
+import com.lmorda.homework.ui.shared.UiTestTags.LOADING_INDICATOR
+import com.lmorda.homework.ui.shared.UiTestTags.LOADING_NEXT_PAGE_INDICATOR
 import org.junit.Rule
 import org.junit.Test
 
@@ -15,7 +21,14 @@ class ContactsScreenTest {
     @Test
     fun testContactsScreenList() {
         composeTestRule.setContent {
-            ContactsScreen(onBack = {})
+            ContactsScreen(
+                onBack = { },
+                state = ContactsContract.State.Loaded(
+                    contacts = mockContactsDomainDataPage1,
+                    nextCursor = null,
+                ),
+                push = { },
+            )
         }
 
         composeTestRule.onNodeWithText("Lou Morda").assertIsDisplayed()
@@ -39,4 +52,31 @@ class ContactsScreenTest {
         composeTestRule.onNodeWithText("Added Apr 01, 2025").assertIsDisplayed()
     }
 
+    @Test
+    fun testContactsLoadingRefreshState() {
+        composeTestRule.setContent {
+            ContactsScreen(
+                onBack = { },
+                state = ContactsContract.State.LoadingRefresh,
+                push = { },
+            )
+        }
+
+        composeTestRule.onNodeWithText("Lou Morda").assertIsNotDisplayed()
+        composeTestRule.onNodeWithTag(LOADING_INDICATOR).assertIsDisplayed()
+    }
+
+    @Test
+    fun testContactsLoadingNextPageState() {
+        composeTestRule.setContent {
+            ContactsScreen(
+                onBack = { },
+                state = ContactsContract.State.LoadingRefresh,
+                push = { },
+            )
+        }
+
+        composeTestRule.onNodeWithText("Lou Morda").assertIsDisplayed()
+        composeTestRule.onNodeWithTag(LOADING_NEXT_PAGE_INDICATOR).assertIsDisplayed()
+    }
 }

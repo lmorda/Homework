@@ -97,6 +97,7 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.mockk.android)
     testImplementation(libs.turbine)
+    testImplementation(libs.livedata.testing)
 
     // Screenshot testing
     androidTestImplementation(libs.androidx.junit)

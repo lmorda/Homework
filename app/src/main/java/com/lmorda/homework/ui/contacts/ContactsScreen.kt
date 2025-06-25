@@ -2,13 +2,13 @@ package com.lmorda.homework.ui.contacts
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -21,7 +21,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -35,9 +38,16 @@ import coil3.request.crossfade
 import com.lmorda.homework.R
 import com.lmorda.homework.domain.model.Contact
 import com.lmorda.homework.domain.model.mockContactsDomainData
+import com.lmorda.homework.domain.model.mockContactsDomainDataPage1
+import com.lmorda.homework.ui.contacts.ContactsContract.Event
+import com.lmorda.homework.ui.contacts.ContactsContract.State
+import com.lmorda.homework.ui.shared.HomeworkLoadingError
+import com.lmorda.homework.ui.shared.HomeworkNextPageIndicator
+import com.lmorda.homework.ui.shared.HomeworkProgressIndicator
 import com.lmorda.homework.ui.shared.Utils
 import com.lmorda.homework.ui.theme.DayAndNightPreview
 import com.lmorda.homework.ui.theme.HomeworkTheme
+import com.lmorda.homework.ui.theme.PaginationEffect
 import com.lmorda.homework.ui.theme.sizeDefault
 import com.lmorda.homework.ui.theme.sizeMedium
 import com.lmorda.homework.ui.theme.sizeSmall
@@ -47,9 +57,13 @@ import java.util.Locale
 
 @Composable
 fun ContactsScreenRoute(
+    viewModel: ContactsViewModel,
     onBack: () -> Unit,
 ) {
+    val state by viewModel.state.collectAsState()
     ContactsScreen(
+        state = state,
+        push = viewModel::push,
         onBack = onBack,
     )
 }
@@ -57,8 +71,11 @@ fun ContactsScreenRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ContactsScreen(
+    state: State,
+    push: (Event) -> Unit,
     onBack: () -> Unit,
 ) {
+    val listState = rememberLazyListState()
     Scaffold(
         topBar = {
             Column {
@@ -90,23 +107,65 @@ internal fun ContactsScreen(
             }
         },
     ) { paddingValues ->
-        ContactsList(
-            contacts = mockContactsDomainData,
-            paddingValues = paddingValues
-        )
+        PullToRefreshBox(
+            isRefreshing = state is State.LoadingRefresh,
+            onRefresh = { push(Event.OnRefresh) },
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            ContactsContent(
+                state = state,
+                listState = listState,
+                push = push,
+            )
+        }
+    }
+}
+
+@Composable
+private fun ContactsContent(
+    state: State,
+    push: (Event) -> Unit,
+    listState: LazyListState,
+) {
+    when (state) {
+        is State.Initial, State.LoadingRefresh -> HomeworkProgressIndicator()
+        is State.LoadingPage -> {
+            ContactsList(
+                listState = listState,
+                contacts = state.contacts,
+                isLoadingNextPage = true,
+            )
+        }
+
+        is State.Loaded -> when {
+            state.contacts.isEmpty() -> HomeworkLoadingError(stringResId = R.string.list_empty)
+            else -> {
+                ContactsList(
+                    listState = listState,
+                    contacts = state.contacts,
+                    isLoadingNextPage = false,
+                )
+                PaginationEffect(
+                    listState = listState,
+                    onLoadMore = { push(Event.OnLoadNextPage) },
+                )
+            }
+        }
     }
 }
 
 @Composable
 private fun ContactsList(
-    paddingValues: PaddingValues,
+    listState: LazyListState,
     contacts: List<Contact>,
+    isLoadingNextPage: Boolean,
 ) {
-    val listState = rememberLazyListState()
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(paddingValues),
+            .padding(start = sizeDefault),
         state = listState,
     ) {
         items(contacts) { contact ->
@@ -114,9 +173,11 @@ private fun ContactsList(
                 contact = contact,
             )
         }
+        if (isLoadingNextPage) {
+            item { HomeworkNextPageIndicator() }
+        }
     }
 }
-
 
 @Composable
 fun ContactItem(contact: Contact) {
@@ -126,7 +187,7 @@ fun ContactItem(contact: Contact) {
     ) {
         AsyncImage(
             modifier = Modifier
-                .size(size = dimensionResource(R.dimen.explore_item_image)),
+                .size(size = dimensionResource(R.dimen.list_item_image)),
             model = ImageRequest.Builder(LocalContext.current)
                 .data(contact.defaultImageUrl)
                 .crossfade(true)
@@ -174,6 +235,11 @@ fun ContactItem(contact: Contact) {
 private fun ContactsScreenPreview() {
     HomeworkTheme {
         ContactsScreen(
+            state = State.Loaded(
+                contacts = mockContactsDomainDataPage1,
+                nextCursor = null,
+            ),
+            push = { },
             onBack = { },
         )
     }
@@ -184,7 +250,7 @@ private fun ContactsScreenPreview() {
 private fun ContactsItemPreview() {
     HomeworkTheme {
         ContactItem(
-            contact = mockContactsDomainData[0],
+            contact = mockContactsDomainData[0].contacts[0],
         )
     }
 }
