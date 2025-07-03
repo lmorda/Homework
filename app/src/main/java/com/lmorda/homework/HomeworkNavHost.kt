@@ -49,6 +49,7 @@ internal fun HomeworkNavHost(navController: NavHostController) {
         }
         composable(route = routeContacts) {
             ContactsScreenRoute(
+                viewModel = hiltViewModel(),
                 onBack = {
                     navController.navigateUp()
                 },

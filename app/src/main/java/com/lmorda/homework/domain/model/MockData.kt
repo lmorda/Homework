@@ -75,7 +75,7 @@ val mockDomainData = Vehicles(
     )
 )
 
-val mockContactsDomainData = listOf(
+val mockContactsDomainDataPage1 = listOf(
     Contact(
         name = "Lou Morda",
         email = "lmorda81@gmail.com",
@@ -135,5 +135,199 @@ val mockContactsDomainData = listOf(
         email = "james.taylor@example.com",
         defaultImageUrl = null,
         createdAt = "2025-04-02T15:25:40.000-08:00"
+    ),
+    Contact(
+        name = "Ava Thompson",
+        email = "ava.thompson@example.com",
+        defaultImageUrl = "https://example.com/image5.jpg",
+        createdAt = "2025-03-01T08:30:00.000-08:00"
+    ),
+    Contact(
+        name = "Daniel Anderson",
+        email = "daniel.anderson@example.com",
+        defaultImageUrl = null,
+        createdAt = "2025-02-25T17:20:00.000-08:00"
+    ),
+    Contact(
+        name = "Isabella Moore",
+        email = "isabella.moore@example.com",
+        defaultImageUrl = "https://example.com/image6.jpg",
+        createdAt = "2025-01-28T13:15:00.000-08:00"
+    ),
+    Contact(
+        name = "Benjamin Jackson",
+        email = "benjamin.jackson@example.com",
+        defaultImageUrl = null,
+        createdAt = "2025-04-04T09:05:00.000-08:00"
+    ),
+    Contact(
+        name = "Mia White",
+        email = "mia.white@example.com",
+        defaultImageUrl = "https://example.com/image7.jpg",
+        createdAt = "2025-03-30T14:45:00.000-08:00"
+    ),
+    Contact(
+        name = "Logan Harris",
+        email = "logan.harris@example.com",
+        defaultImageUrl = null,
+        createdAt = "2025-02-12T10:10:00.000-08:00"
+    ),
+    Contact(
+        name = "Charlotte Martin",
+        email = "charlotte.martin@example.com",
+        defaultImageUrl = "https://example.com/image8.jpg",
+        createdAt = "2025-03-25T11:11:00.000-08:00"
+    ),
+    Contact(
+        name = "Henry Thompson",
+        email = "henry.thompson@example.com",
+        defaultImageUrl = null,
+        createdAt = "2025-01-10T15:00:00.000-08:00"
+    ),
+    Contact(
+        name = "Amelia Garcia",
+        email = "amelia.garcia@example.com",
+        defaultImageUrl = "https://example.com/image9.jpg",
+        createdAt = "2025-03-03T13:30:00.000-08:00"
+    ),
+    Contact(
+        name = "Lucas Martinez",
+        email = "lucas.martinez@example.com",
+        defaultImageUrl = null,
+        createdAt = "2025-02-05T12:12:12.000-08:00"
+    )
+)
+
+val mockContactsDomainDataPage2 = listOf(
+    Contact(
+        name = "Ella Robinson",
+        email = "ella.robinson@example.com",
+        defaultImageUrl = "https://example.com/image10.jpg",
+        createdAt = "2025-03-07T10:22:00.000-08:00"
+    ),
+    Contact(
+        name = "Jack Clark",
+        email = "jack.clark@example.com",
+        defaultImageUrl = null,
+        createdAt = "2025-02-18T14:40:00.000-08:00"
+    ),
+    Contact(
+        name = "Lily Lewis",
+        email = "lily.lewis@example.com",
+        defaultImageUrl = "https://example.com/image11.jpg",
+        createdAt = "2025-01-31T09:30:00.000-08:00"
+    ),
+    Contact(
+        name = "Noah Lee",
+        email = "noah.lee@example.com",
+        defaultImageUrl = null,
+        createdAt = "2025-03-20T16:20:00.000-08:00"
+    ),
+    Contact(
+        name = "Grace Walker",
+        email = "grace.walker@example.com",
+        defaultImageUrl = "https://example.com/image12.jpg",
+        createdAt = "2025-04-05T13:35:00.000-08:00"
+    ),
+    Contact(
+        name = "Lucas Hall",
+        email = "lucas.hall@example.com",
+        defaultImageUrl = null,
+        createdAt = "2025-02-08T10:15:00.000-08:00"
+    ),
+    Contact(
+        name = "Chloe Allen",
+        email = "chloe.allen@example.com",
+        defaultImageUrl = "https://example.com/image13.jpg",
+        createdAt = "2025-03-28T15:50:00.000-08:00"
+    ),
+    Contact(
+        name = "Mason Young",
+        email = "mason.young@example.com",
+        defaultImageUrl = null,
+        createdAt = "2025-02-14T08:25:00.000-08:00"
+    ),
+    Contact(
+        name = "Avery Hernandez",
+        email = "avery.hernandez@example.com",
+        defaultImageUrl = "https://example.com/image14.jpg",
+        createdAt = "2025-03-16T17:00:00.000-08:00"
+    ),
+    Contact(
+        name = "Sebastian King",
+        email = "sebastian.king@example.com",
+        defaultImageUrl = null,
+        createdAt = "2025-01-29T12:10:00.000-08:00"
+    ),
+    Contact(
+        name = "Harper Wright",
+        email = "harper.wright@example.com",
+        defaultImageUrl = "https://example.com/image15.jpg",
+        createdAt = "2025-03-13T11:45:00.000-08:00"
+    ),
+    Contact(
+        name = "Ethan Lopez",
+        email = "ethan.lopez@example.com",
+        defaultImageUrl = null,
+        createdAt = "2025-04-06T09:55:00.000-08:00"
+    ),
+    Contact(
+        name = "Abigail Hill",
+        email = "abigail.hill@example.com",
+        defaultImageUrl = "https://example.com/image16.jpg",
+        createdAt = "2025-02-20T14:05:00.000-08:00"
+    ),
+    Contact(
+        name = "Logan Scott",
+        email = "logan.scott@example.com",
+        defaultImageUrl = null,
+        createdAt = "2025-03-24T13:12:00.000-08:00"
+    ),
+    Contact(
+        name = "Sofia Green",
+        email = "sofia.green@example.com",
+        defaultImageUrl = "https://example.com/image17.jpg",
+        createdAt = "2025-01-27T16:45:00.000-08:00"
+    ),
+    Contact(
+        name = "Jacob Adams",
+        email = "jacob.adams@example.com",
+        defaultImageUrl = null,
+        createdAt = "2025-02-16T12:22:00.000-08:00"
+    ),
+    Contact(
+        name = "Aria Nelson",
+        email = "aria.nelson@example.com",
+        defaultImageUrl = "https://example.com/image18.jpg",
+        createdAt = "2025-03-09T15:38:00.000-08:00"
+    ),
+    Contact(
+        name = "Matthew Carter",
+        email = "matthew.carter@example.com",
+        defaultImageUrl = null,
+        createdAt = "2025-04-03T10:00:00.000-08:00"
+    ),
+    Contact(
+        name = "Scarlett Mitchell",
+        email = "scarlett.mitchell@example.com",
+        defaultImageUrl = "https://example.com/image19.jpg",
+        createdAt = "2025-03-11T11:59:00.000-08:00"
+    ),
+    Contact(
+        name = "Alexander Perez",
+        email = "alexander.perez@example.com",
+        defaultImageUrl = null,
+        createdAt = "2025-02-22T13:18:00.000-08:00"
+    )
+)
+
+val mockContactsDomainData = listOf(
+    Contacts(
+        nextCursor = "mockContactsDomainDataPage2",
+        contacts = mockContactsDomainDataPage1,
+    ),
+    Contacts(
+        nextCursor = null,
+        contacts = mockContactsDomainDataPage2,
     )
 )

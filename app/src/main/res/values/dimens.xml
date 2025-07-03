@@ -6,7 +6,7 @@
     <dimen name="large">24dp</dimen>
     <dimen name="xLarge">32dp</dimen>
 
-    <dimen name="explore_item_image">56dp</dimen>
-    <dimen name="explore_next_page_indicator">48dp</dimen>
+    <dimen name="list_item_image">56dp</dimen>
+    <dimen name="next_page_indicator">48dp</dimen>
     <dimen name="details_map">250dp</dimen>
 </resources>
