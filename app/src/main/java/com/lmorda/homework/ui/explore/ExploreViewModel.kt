@@ -8,6 +8,7 @@ import com.lmorda.homework.domain.featureflag.FeatureFlagRepository
 import com.lmorda.homework.domain.filters.VehicleFilter
 import com.lmorda.homework.domain.filters.VehicleSort
 import com.lmorda.homework.domain.model.Vehicle
+import com.lmorda.homework.domain.usecase.GetVehiclePageUseCase
 import com.lmorda.homework.ui.MviViewModel
 import com.lmorda.homework.ui.explore.ExploreContract.Event
 import com.lmorda.homework.ui.explore.ExploreContract.Event.Internal.OnLoadError
@@ -29,8 +30,8 @@ import kotlin.coroutines.cancellation.CancellationException
 
 @HiltViewModel
 class ExploreViewModel @Inject constructor(
-    private val dataRepository: DataRepository,
     private val featureFlagRepository: FeatureFlagRepository,
+    private val getVehiclePageUseCase: GetVehiclePageUseCase,
 ) : MviViewModel<State, Event>(
     initialState = State.Initial,
 ) {
@@ -95,12 +96,10 @@ class ExploreViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             try {
-                val vehiclePage = dataRepository.getVehicles(
+                val vehiclePage = getVehiclePageUseCase.invoke(
                     startCursor = nextCursor,
                     sort = VehicleSort.NAME_ASCENDING,
-                    filter = nameLike?.takeIf { it.isNotBlank() }?.let {
-                        VehicleFilter.NameLike(it)
-                    },
+                    nameLike = nameLike,
                 )
                 val vehicles = currentVehicles ?: emptyList()
                 val newVehicles = vehicles + vehiclePage.records
@@ -124,12 +123,10 @@ class ExploreViewModel @Inject constructor(
                 delay(EXPLORE_FILTER_DEBOUNCE_MILLIS)
             }
             try {
-                val vehiclePage = dataRepository.getVehicles(
+                val vehiclePage = getVehiclePageUseCase.invoke(
                     startCursor = null,
                     sort = VehicleSort.NAME_ASCENDING,
-                    filter = nameLike?.takeIf { it.isNotBlank() }?.let {
-                        VehicleFilter.NameLike(it)
-                    },
+                    nameLike = nameLike,
                 )
                 push(
                     OnLoaded(
