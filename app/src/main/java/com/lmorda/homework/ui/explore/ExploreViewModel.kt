@@ -30,7 +30,6 @@ import kotlin.coroutines.cancellation.CancellationException
 
 @HiltViewModel
 class ExploreViewModel @Inject constructor(
-    private val dataRepository: DataRepository,
     private val featureFlagRepository: FeatureFlagRepository,
     private val getVehiclePageUseCase: GetVehiclePageUseCase,
 ) : MviViewModel<State, Event>(
@@ -124,12 +123,10 @@ class ExploreViewModel @Inject constructor(
                 delay(EXPLORE_FILTER_DEBOUNCE_MILLIS)
             }
             try {
-                val vehiclePage = dataRepository.getVehicles(
+                val vehiclePage = getVehiclePageUseCase.invoke(
                     startCursor = null,
                     sort = VehicleSort.NAME_ASCENDING,
-                    filter = nameLike?.takeIf { it.isNotBlank() }?.let {
-                        VehicleFilter.NameLike(it)
-                    },
+                    nameLike = nameLike,
                 )
                 push(
                     OnLoaded(
