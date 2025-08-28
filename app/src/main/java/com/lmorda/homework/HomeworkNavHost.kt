@@ -10,7 +10,11 @@ import androidx.navigation.navArgument
 import com.lmorda.homework.ui.contacts.ContactsScreenRoute
 import com.lmorda.homework.ui.details.DetailsScreenRoute
 import com.lmorda.homework.ui.explore.ExploreScreenRoute
+import com.lmorda.homework.ui.login.LoginScreenRoute
+import com.lmorda.homework.ui.selectAccount.SelectAccountScreenRoute
 
+const val routeLogin = "login"
+const val routeSelectAccount = "selectAccount"
 const val routeExplore = "explore"
 const val routeDetailsBase = "details"
 const val argDetailsId = "id"
@@ -21,8 +25,35 @@ const val routeContacts = "contacts"
 internal fun HomeworkNavHost(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = routeExplore,
+        startDestination = routeLogin,
     ) {
+        composable(route = routeLogin) {
+            LoginScreenRoute(
+                viewModel = hiltViewModel(),
+                onNavigateToAccountSelect = {
+                    navController.navigate(routeSelectAccount)
+                }
+            )
+        }
+        composable(route = routeSelectAccount) {
+            SelectAccountScreenRoute(
+                viewModel = hiltViewModel(),
+                onBack = {
+                    navController.navigateUp()
+                },
+                onNavigateToExplore = {
+                    navController.navigate(routeExplore)
+                },
+            )
+        }
+        composable(route = routeContacts) {
+            ContactsScreenRoute(
+                viewModel = hiltViewModel(),
+                onBack = {
+                    navController.navigateUp()
+                },
+            )
+        }
         composable(route = routeExplore) {
             ExploreScreenRoute(
                 viewModel = hiltViewModel(),

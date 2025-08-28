@@ -11,10 +11,14 @@ import com.lmorda.homework.ui.contacts.ContactsContract.Event.OnRefresh
 import com.lmorda.homework.ui.contacts.ContactsContract.State
 import com.lmorda.homework.ui.contacts.ContactsContract.State.Initial
 import com.lmorda.homework.ui.contacts.ContactsContract.State.Loaded
+import com.lmorda.homework.ui.contacts.ContactsContract.State.LoadingPage
+import com.lmorda.homework.ui.contacts.ContactsContract.State.LoadingRefresh
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class ContactsViewModel @Inject constructor() : MviViewModel<State, Event>(
     initialState = Initial,
 ) {
@@ -34,14 +38,14 @@ class ContactsViewModel @Inject constructor() : MviViewModel<State, Event>(
                     currentContacts = state.contacts,
                     nextCursor = state.nextCursor,
                 )
-                State.LoadingPage(
+                LoadingPage(
                     contacts = state.contacts,
                 )
             } else state
         }
         OnRefresh -> {
             getFirstPage()
-            State.LoadingRefresh
+            LoadingRefresh
         }
     }
 

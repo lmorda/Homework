@@ -16,6 +16,14 @@ class DataRepositoryImpl @Inject constructor(
     private val mapper: DataMapper,
 ) : DataRepository {
 
+    override suspend fun login(username: String, password: String) {
+
+    }
+
+    override suspend fun selectAccount(accountName: String) {
+
+    }
+
     override suspend fun getVehicles(
         startCursor: String?,
         sort: VehicleSort?,

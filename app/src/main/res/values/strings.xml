@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Homework</string>
+    <string name="select_account_title">Select Account</string>
     <string name="explore_title">Vehicles</string>
     <string name="contacts_title">Contacts</string>
     <string name="list_empty">No results found</string>
@@ -21,4 +22,9 @@
     <string name="accessibility_clear">Clear</string>
     <string name="accessibility_search">Search</string>
     <string name="added">Added</string>
+    <string name="email_or_username">Email or Username</string>
+    <string name="accessibility_fleetio_logo">Fleetio Logo</string>
+    <string name="accessibility_toggle_password">Toggle password visibility</string>
+    <string name="log_in">Log in</string>
+    <string name="password">Password</string>
 </resources>
