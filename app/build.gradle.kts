@@ -64,6 +64,7 @@ dependencies {
     implementation(libs.androidx.compose.lifecycle)
     implementation(libs.androidx.compose.navigation)
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.androidx.material.icons.extended)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 

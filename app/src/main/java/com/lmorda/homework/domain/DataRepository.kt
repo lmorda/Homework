@@ -7,6 +7,10 @@ import com.lmorda.homework.domain.model.Vehicles
 
 interface DataRepository {
 
+    suspend fun login(username: String, password: String)
+
+    suspend fun selectAccount(accountName: String)
+
     suspend fun getVehicles(
         startCursor: String?,
         sort: VehicleSort?,
@@ -17,5 +21,4 @@ interface DataRepository {
 
     suspend fun updateVehicle(id: Long, vehicle: Vehicle): Vehicle
 
-    // TODO: Add get list of comments
 }
