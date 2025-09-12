@@ -1,6 +1,6 @@
 package com.lmorda.homework.domain.model
 
-data class Login(
+data class LoginCredentials(
     val username: String,
     val password: String,
 )

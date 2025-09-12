@@ -40,7 +40,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.dp
 import com.lmorda.homework.R
 import com.lmorda.homework.ui.login.LoginContract.Event
 import com.lmorda.homework.ui.login.LoginContract.Event.Internal.OnLogin
@@ -50,7 +49,6 @@ import com.lmorda.homework.ui.theme.DayAndNightPreview
 import com.lmorda.homework.ui.theme.HomeworkTheme
 import com.lmorda.homework.ui.theme.sizeDefault
 import com.lmorda.homework.ui.theme.sizeLarge
-import com.lmorda.homework.ui.theme.sizeMedium
 import com.lmorda.homework.ui.theme.sizeSmall
 import com.lmorda.homework.ui.theme.sizeXLarge
 import com.lmorda.homework.ui.theme.sizeXXLarge
@@ -61,11 +59,14 @@ fun LoginScreenRoute(
     onNavigateToAccountSelect: () -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
-    if (state is State.LoggedIn) onNavigateToAccountSelect() else
-    LoginScreen(
-        state = state,
-        push = viewModel::push,
-    )
+    if (state is State.LoggedIn) {
+        onNavigateToAccountSelect()
+    } else {
+        LoginScreen(
+            state = state,
+            push = viewModel::push,
+        )
+    }
 }
 
 @Composable

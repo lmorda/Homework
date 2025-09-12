@@ -35,12 +35,15 @@ serialization = "2.1.10"
 retrofitSerialization = "1.0.0"
 kotlinxJson = "1.8.0"
 
+# DataStore
+datastore = "1.1.1"
+
 # Other
 timber = "5.0.1"
-lottie = "6.6.2"
-coilCompose = "3.0.4"
-coilNetworkOkhttp = "3.0.4"
-runtimeLivedata = "1.7.8"
+lottie = "6.6.7"
+coilCompose = "3.3.0"
+coilNetworkOkhttp = "3.3.0"
+runtimeLivedata = "1.9.0"
 
 [libraries]
 
@@ -76,6 +79,9 @@ retrofit-serialization = { group = "com.jakewharton.retrofit", name = "retrofit2
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxJson" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+
+# DataStore
+datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 
 # Other
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }

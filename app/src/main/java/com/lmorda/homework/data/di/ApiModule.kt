@@ -5,6 +5,7 @@ import com.lmorda.homework.BuildConfig
 import com.lmorda.homework.data.api.ApiService
 import com.lmorda.homework.data.api.BASE_URL
 import com.lmorda.homework.data.api.CONTENT_TYPE
+import com.lmorda.homework.data.api.OAuthApiService
 import com.lmorda.homework.data.api.interceptor.AccountTokenInterceptor
 import com.lmorda.homework.data.api.interceptor.ApiKeyInterceptor
 import dagger.Module
@@ -59,5 +60,11 @@ object ApiModule {
     @Singleton
     fun provideApiService(retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideOAuthApiService(retrofit: Retrofit): OAuthApiService {
+        return retrofit.create(OAuthApiService::class.java)
     }
 }

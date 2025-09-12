@@ -1,12 +1,21 @@
 package com.lmorda.homework.domain.usecase
 
-import com.lmorda.homework.domain.DataRepository
+import com.lmorda.homework.domain.credentials.TokenDataStore
+import com.lmorda.homework.domain.repository.LoginRepository
+import com.lmorda.homework.domain.model.LoginCredentials
+import timber.log.Timber
 import javax.inject.Inject
 
 class LoginUseCase @Inject constructor(
-    private val dataRepository: DataRepository,
+    private val loginRepository: LoginRepository,
+    private val tokenDataStore: TokenDataStore,
 ) {
     suspend operator fun invoke(username: String, password: String) {
-        dataRepository.login(username = username, password = password)
+        try {
+            val session = loginRepository.login(LoginCredentials(username, password))
+            tokenDataStore.setToken(session.accessToken)
+        } catch (ex: Exception) {
+            throw ex
+        }
     }
 }

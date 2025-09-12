@@ -22,13 +22,18 @@ class LoginViewModel @Inject constructor(
             login(username = event.username, password = event.password)
             State.LoggedIn
         }
+
         Event.OnLoggedIn -> Initial
         Event.OnLoginError -> Initial
     }
 
     private fun login(username: String, password: String) {
         viewModelScope.launch {
-            loginUseCase.invoke(username = username, password = password)
+            try {
+                loginUseCase.invoke(username = username, password = password)
+            } catch (e: Exception) {
+                push(Event.OnLoginError)
+            }
         }
     }
 }

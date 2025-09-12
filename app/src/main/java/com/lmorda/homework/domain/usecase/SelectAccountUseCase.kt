@@ -1,14 +1,14 @@
 package com.lmorda.homework.domain.usecase
 
-import com.lmorda.homework.domain.DataRepository
+import com.lmorda.homework.domain.repository.LoginRepository
 import javax.inject.Inject
 
 class SelectAccountUseCase @Inject constructor(
-    private val dataRepository: DataRepository,
+    private val loginRepository: LoginRepository,
 ) {
 
     suspend operator fun invoke(accountName: String) {
-        dataRepository.selectAccount(
+        loginRepository.selectAccount(
             accountName = accountName,
         )
     }

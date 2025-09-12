@@ -1,4 +1,4 @@
-package com.lmorda.homework.domain
+package com.lmorda.homework.domain.repository
 
 import com.lmorda.homework.domain.filters.VehicleFilter
 import com.lmorda.homework.domain.filters.VehicleSort
@@ -6,10 +6,6 @@ import com.lmorda.homework.domain.model.Vehicle
 import com.lmorda.homework.domain.model.Vehicles
 
 interface DataRepository {
-
-    suspend fun login(username: String, password: String)
-
-    suspend fun selectAccount(accountName: String)
 
     suspend fun getVehicles(
         startCursor: String?,

@@ -4,7 +4,7 @@ import com.lmorda.homework.data.api.ApiService
 import com.lmorda.homework.data.api.VEHICLES_PER_PAGE
 import com.lmorda.homework.data.api.result.safeApiCall
 import com.lmorda.homework.data.mapper.DataMapper
-import com.lmorda.homework.domain.DataRepository
+import com.lmorda.homework.domain.repository.DataRepository
 import com.lmorda.homework.domain.filters.VehicleFilter
 import com.lmorda.homework.domain.filters.VehicleSort
 import com.lmorda.homework.domain.model.Vehicle
@@ -15,14 +15,6 @@ class DataRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
     private val mapper: DataMapper,
 ) : DataRepository {
-
-    override suspend fun login(username: String, password: String) {
-
-    }
-
-    override suspend fun selectAccount(accountName: String) {
-
-    }
 
     override suspend fun getVehicles(
         startCursor: String?,

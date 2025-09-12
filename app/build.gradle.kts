@@ -32,6 +32,8 @@ android {
         }
         buildConfigField("String", "ACCOUNT_TOKEN", "\"${localProperties["ACCOUNT_TOKEN"]}\"")
         buildConfigField("String", "API_KEY", "\"${localProperties["API_KEY"]}\"")
+        buildConfigField("String", "OAUTH_CLIENT_ID", "\"${localProperties["OAUTH_CLIENT_ID"]}\"")
+        buildConfigField("String", "OAUTH_CLIENT_SECRET", "\"${localProperties["OAUTH_CLIENT_SECRET"]}\"")
         val mapsApiKey = localProperties.getProperty("MAPS_API_KEY")
         manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
@@ -80,6 +82,9 @@ dependencies {
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.okhttp)
     implementation(libs.kotlinx.serialization.json)
+
+    // Datastore
+    implementation(libs.datastore)
 
     // Timber + Lottie + Coil
     implementation(libs.timber)

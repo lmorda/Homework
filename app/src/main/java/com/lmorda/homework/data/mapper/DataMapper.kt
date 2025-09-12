@@ -1,5 +1,6 @@
 package com.lmorda.homework.data.mapper
 
+import com.lmorda.homework.BuildConfig
 import com.lmorda.homework.data.api.FILTER_NAME_LIKE
 import com.lmorda.homework.data.api.SORT_ASCENDING
 import com.lmorda.homework.data.api.SORT_DESCENDING
@@ -7,13 +8,17 @@ import com.lmorda.homework.data.api.SORT_NAME
 import com.lmorda.homework.data.model.CurrentLocationEntryDto
 import com.lmorda.homework.data.model.DriverDto
 import com.lmorda.homework.data.model.GeolocationDto
+import com.lmorda.homework.data.model.LoginRequestDto
+import com.lmorda.homework.data.model.LoginResponseDto
 import com.lmorda.homework.data.model.VehicleDto
 import com.lmorda.homework.data.model.VehiclesDto
 import com.lmorda.homework.domain.filters.VehicleFilter
 import com.lmorda.homework.domain.filters.VehicleSort
+import com.lmorda.homework.domain.model.AuthToken
 import com.lmorda.homework.domain.model.CurrentLocationEntry
 import com.lmorda.homework.domain.model.Driver
 import com.lmorda.homework.domain.model.Geolocation
+import com.lmorda.homework.domain.model.LoginCredentials
 import com.lmorda.homework.domain.model.Vehicle
 import com.lmorda.homework.domain.model.Vehicles
 import javax.inject.Inject
@@ -91,5 +96,31 @@ class DataMapper @Inject constructor() {
 
     fun map(filter: VehicleFilter) = when (filter) {
         is VehicleFilter.NameLike -> FILTER_NAME_LIKE to filter.value
+    }
+
+    fun map(
+        loginCredentials: LoginCredentials,
+    ): LoginRequestDto {
+        return LoginRequestDto(
+            clientId = BuildConfig.OAUTH_CLIENT_ID,
+            clientSecret = BuildConfig.OAUTH_CLIENT_SECRET,
+            login = loginCredentials.username,
+            password = loginCredentials.password,
+            grantType = "password",
+        )
+    }
+
+    fun map(dto: LoginResponseDto): AuthToken {
+        val access = requireNotNull(dto.accessToken) { "Missing access_token" }
+        val scopes = dto.scope?.split(Regex("\\s+"))?.filter { it.isNotBlank() }?.toSet().orEmpty()
+
+        return AuthToken(
+            accessToken = access,
+            tokenType = dto.tokenType,
+            refreshToken = dto.refreshToken,
+            scope = scopes,
+            issuedAtEpochSeconds = dto.createdAt,
+            ttlSeconds = dto.expiresIn
+        )
     }
 }
