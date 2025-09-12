@@ -1,6 +1,6 @@
 package com.lmorda.homework.domain.usecase
 
-import com.lmorda.homework.domain.DataRepository
+import com.lmorda.homework.domain.repository.DataRepository
 import com.lmorda.homework.domain.filters.VehicleFilter
 import com.lmorda.homework.domain.filters.VehicleSort
 import com.lmorda.homework.domain.model.Vehicles

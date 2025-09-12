@@ -1,16 +1,14 @@
 package com.lmorda.homework
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.lmorda.homework.domain.DataRepository
+import com.lmorda.homework.domain.repository.DataRepository
 import com.lmorda.homework.domain.featureflag.FeatureFlag
 import com.lmorda.homework.domain.featureflag.FeatureFlagRepository
-import com.lmorda.homework.domain.filters.VehicleSort
 import com.lmorda.homework.domain.model.mockDomainData
 import com.lmorda.homework.domain.usecase.GetVehiclePageUseCase
 import com.lmorda.homework.ui.explore.ExploreContract
 import com.lmorda.homework.ui.explore.ExploreViewModel
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers

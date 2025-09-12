@@ -2,10 +2,8 @@ package com.lmorda.homework.ui.explore
 
 import androidx.lifecycle.viewModelScope
 import com.lmorda.homework.data.api.EXPLORE_FILTER_DEBOUNCE_MILLIS
-import com.lmorda.homework.domain.DataRepository
 import com.lmorda.homework.domain.featureflag.FeatureFlag
 import com.lmorda.homework.domain.featureflag.FeatureFlagRepository
-import com.lmorda.homework.domain.filters.VehicleFilter
 import com.lmorda.homework.domain.filters.VehicleSort
 import com.lmorda.homework.domain.model.Vehicle
 import com.lmorda.homework.domain.usecase.GetVehiclePageUseCase

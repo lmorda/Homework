@@ -2,7 +2,7 @@ package com.lmorda.homework
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import app.cash.turbine.test
-import com.lmorda.homework.domain.DataRepository
+import com.lmorda.homework.domain.repository.DataRepository
 import com.lmorda.homework.domain.model.mockContactsDomainData
 import com.lmorda.homework.domain.model.mockDomainData
 import com.lmorda.homework.ui.contacts.ContactsContract.Event.OnRefresh
