@@ -16,6 +16,12 @@ interface SelectAccountContract {
     sealed class Event {
         data object OnAccountsError: Event()
 
+        data class OnAccountsLoaded(
+            val accounts: List<Account>,
+        ): Event()
+
+        data object OnAccountIdSaved: Event()
+
         sealed class Internal : Event() {
             data class OnAccountSelected(
                 val id: Long,

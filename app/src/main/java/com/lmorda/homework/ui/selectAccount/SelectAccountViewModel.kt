@@ -6,7 +6,9 @@ import com.lmorda.homework.domain.usecase.SelectAccountUseCase
 import com.lmorda.homework.ui.MviViewModel
 import com.lmorda.homework.ui.selectAccount.SelectAccountContract.Event
 import com.lmorda.homework.ui.selectAccount.SelectAccountContract.Event.Internal.OnAccountSelected
+import com.lmorda.homework.ui.selectAccount.SelectAccountContract.Event.OnAccountIdSaved
 import com.lmorda.homework.ui.selectAccount.SelectAccountContract.Event.OnAccountsError
+import com.lmorda.homework.ui.selectAccount.SelectAccountContract.Event.OnAccountsLoaded
 import com.lmorda.homework.ui.selectAccount.SelectAccountContract.State
 import com.lmorda.homework.ui.selectAccount.SelectAccountContract.State.AccountSelected
 import com.lmorda.homework.ui.selectAccount.SelectAccountContract.State.AccountLoadError
@@ -27,8 +29,20 @@ class SelectAccountViewModel @Inject constructor(
     }
 
     override fun reduce(state: State, event: Event): State = when (event) {
+        is OnAccountsLoaded -> {
+            val accounts = event.accounts
+            if (accounts.size == 1) {
+                selectAccount(accounts[0].id)
+                state
+            } else {
+                AccountsLoaded(accounts = accounts)
+            }
+        }
         is OnAccountSelected -> {
             selectAccount(event.id)
+            state
+        }
+        is OnAccountIdSaved -> {
             AccountSelected
         }
         is OnAccountsError -> AccountLoadError
@@ -38,7 +52,7 @@ class SelectAccountViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val accounts = getAccountsUseCase()
-                AccountsLoaded(accounts = accounts)
+                push (OnAccountsLoaded(accounts = accounts))
             } catch (ex: Exception) {
                 push (OnAccountsError)
             }
@@ -49,6 +63,7 @@ class SelectAccountViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 selectAccountUseCase(id = id)
+                push (OnAccountIdSaved)
             } catch (ex: Exception) {
                 push (OnAccountsError)
             }

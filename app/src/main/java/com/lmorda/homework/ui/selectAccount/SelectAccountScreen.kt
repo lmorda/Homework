@@ -118,7 +118,7 @@ private fun SelectAccountScreen(
         },
     ) { paddingValues ->
         when (state) {
-            is Initial -> HomeworkProgressIndicator()
+            is Initial -> {}
             is AccountSelected -> onNavigateToExplore()
             is AccountsLoaded -> AccountList(
                 listState = listState,
