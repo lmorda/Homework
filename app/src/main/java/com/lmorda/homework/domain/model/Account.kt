@@ -1,6 +1,7 @@
 package com.lmorda.homework.domain.model
 
-data class SelectAccount(
+data class Account(
+    val id: Long,
     val name: String,
-    val role: String,
+    val userType: String,
 )

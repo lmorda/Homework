@@ -1,6 +1,6 @@
 package com.lmorda.homework.data.api
 
-const val BASE_URL = "https://secure.fleetio.com/api/v1/"
+const val BASE_URL = "https://secure.fleetio.com/"
 const val HEADER_AUTHORIZATION = "Authorization"
 const val HEADER_ACCOUNT_TOKEN = "Account-Token"
 const val CONTENT_TYPE = "application/json"

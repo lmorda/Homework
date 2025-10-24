@@ -11,6 +11,14 @@ class HomeworkSharedPrefsImpl @Inject constructor(
     private val sharedPreferences: SharedPreferences,
 ) : HomeworkSharedPrefs {
 
+    override fun putLong(key: String, value: Long) {
+        sharedPreferences.edit { putLong(key, value) }
+    }
+
+    override fun getLong(key: String, defaultValue: Long?): Long? =
+        defaultValue?.let { sharedPreferences.getLong(key, it) }
+
+
     override fun putString(key: String, value: String) {
         sharedPreferences.edit { putString(key, value) }
     }

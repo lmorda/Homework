@@ -27,4 +27,6 @@
     <string name="accessibility_toggle_password">Toggle password visibility</string>
     <string name="log_in">Log in</string>
     <string name="password">Password</string>
+    <string name="login_error">Could not log in</string>
+    <string name="select_account_error">Could not select account</string>
 </resources>

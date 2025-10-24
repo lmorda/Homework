@@ -6,6 +6,6 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface OAuthApiService {
-  @POST("/oauth/token")
-  suspend fun loginWithPasswordGrant(@Body loginRequestDto: LoginRequestDto): LoginResponseDto
+    @POST("oauth/token")
+    suspend fun login(@Body loginRequestDto: LoginRequestDto): LoginResponseDto
 }

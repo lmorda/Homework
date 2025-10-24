@@ -5,10 +5,7 @@ interface LoginContract {
     sealed class State {
         data object Initial : State()
 
-        data class LoggingIn(
-            val username: String,
-            val password: String,
-        ) : State()
+        data object LoggingIn : State()
 
         data object LoggedIn : State()
 

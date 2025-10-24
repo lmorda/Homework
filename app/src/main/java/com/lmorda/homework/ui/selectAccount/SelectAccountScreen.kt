@@ -27,9 +27,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -38,7 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import com.lmorda.homework.domain.model.SelectAccount
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
 import com.lmorda.homework.ui.selectAccount.SelectAccountContract.Event
 import com.lmorda.homework.ui.selectAccount.SelectAccountContract.State
 import com.lmorda.homework.ui.selectAccount.SelectAccountContract.State.Initial
@@ -48,12 +48,19 @@ import com.lmorda.homework.ui.theme.sizeSmall
 import com.lmorda.homework.ui.theme.sizeXLarge
 import com.lmorda.homework.ui.theme.topAppBarColors
 import com.lmorda.homework.R
+import com.lmorda.homework.domain.model.Account
+import com.lmorda.homework.ui.selectAccount.SelectAccountContract.State.AccountLoadError
+import com.lmorda.homework.ui.selectAccount.SelectAccountContract.State.AccountSelected
+import com.lmorda.homework.ui.selectAccount.SelectAccountContract.State.AccountsLoaded
+import com.lmorda.homework.ui.shared.HomeworkProgressIndicator
+import kotlinx.coroutines.launch
 
 @Composable
 fun SelectAccountScreenRoute(
     viewModel: SelectAccountViewModel,
     onBack: () -> Unit,
     onNavigateToExplore: () -> Unit,
+    snackbarHostState: SnackbarHostState,
 ) {
     val state by viewModel.state.collectAsState()
     SelectAccountScreen(
@@ -61,6 +68,7 @@ fun SelectAccountScreenRoute(
         push = viewModel::push,
         onBack = onBack,
         onNavigateToExplore = onNavigateToExplore,
+        snackbarHostState = snackbarHostState,
     )
 }
 
@@ -71,25 +79,13 @@ private fun SelectAccountScreen(
     push: (Event) -> Unit,
     onBack: () -> Unit,
     onNavigateToExplore: () -> Unit,
+    snackbarHostState: SnackbarHostState,
 ) {
-    val accounts = remember {
-        listOf(
-            SelectAccount("City of Fleetio", "Admin"),
-            SelectAccount("Demo Company", "Admin"),
-            SelectAccount("Demo FIFO", "Admin"),
-            SelectAccount("EPL Advanced (FIFO Sandbox)", "Owner"),
-            SelectAccount("EPL Advanced (FIFO)", "Owner"),
-            SelectAccount("EPL Advanced (Static Sandbox)", "Owner"),
-            SelectAccount("EPL Advanced (Static)", "Owner"),
-            SelectAccount("EPL Enterprise", "Owner"),
-            SelectAccount("EPL Essential", "Owner"),
-            SelectAccount("EPL Parts & Labor", "Owner"),
-            SelectAccount("EPL Premium (FIFO)", "Owner")
-        )
-    }
-    var selectedAccount by remember { mutableStateOf<SelectAccount?>(null) }
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
 
     val listState = rememberLazyListState()
+
     Scaffold(
         topBar = {
             Column {
@@ -122,13 +118,16 @@ private fun SelectAccountScreen(
         },
     ) { paddingValues ->
         when (state) {
-            is Initial -> AccountList(
+            is Initial -> HomeworkProgressIndicator()
+            is AccountSelected -> onNavigateToExplore()
+            is AccountsLoaded -> AccountList(
                 listState = listState,
-                accounts = accounts,
+                accounts = state.accounts,
                 paddingValues = paddingValues,
-                // onAccountSelected = { selectedAccount = it }
                 onNavigateToExplore = onNavigateToExplore,
+                push = push,
             )
+            AccountLoadError -> {} // snackbar
         }
     }
 }
@@ -136,9 +135,10 @@ private fun SelectAccountScreen(
 @Composable
 fun AccountList(
     listState: LazyListState,
-    accounts: List<SelectAccount>,
+    accounts: List<Account>,
     paddingValues: PaddingValues,
-    onNavigateToExplore: () -> Unit
+    onNavigateToExplore: () -> Unit,
+    push: (Event) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -150,7 +150,8 @@ fun AccountList(
             AccountItem(
                 account = account,
                 isSelected = false,
-                onNavigateToExplore = onNavigateToExplore
+                onNavigateToExplore = onNavigateToExplore,
+                push = push,
             )
         }
     }
@@ -158,20 +159,27 @@ fun AccountList(
 
 @Composable
 fun AccountItem(
-    account: SelectAccount,
+    account: Account,
     isSelected: Boolean,
-    onNavigateToExplore: () -> Unit
+    onNavigateToExplore: () -> Unit,
+    push: (Event) -> Unit,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onNavigateToExplore() }
+            .clickable {
+                onNavigateToExplore()
+                push(Event.Internal.OnAccountSelected(account.id))
+            }
             .padding(vertical = 12.dp, horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(
             selected = isSelected,
-            onClick = { onNavigateToExplore() }
+            onClick = {
+                onNavigateToExplore()
+                push(Event.Internal.OnAccountSelected(account.id))
+            }
         )
         Spacer(modifier = Modifier.width(16.dp))
         Column(
@@ -184,7 +192,7 @@ fun AccountItem(
                 fontWeight = FontWeight.Normal
             )
             Text(
-                text = account.role,
+                text = account.userType,
                 fontSize = 14.sp,
                 color = androidx.compose.ui.graphics.Color.Gray
             )
@@ -201,6 +209,7 @@ private fun SelectAccountScreenPreview() {
             push = {},
             onBack = {},
             onNavigateToExplore = {},
+            snackbarHostState = remember { SnackbarHostState() },
         )
     }
 }

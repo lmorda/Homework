@@ -3,7 +3,6 @@ package com.lmorda.homework.domain.usecase
 import com.lmorda.homework.domain.credentials.TokenDataStore
 import com.lmorda.homework.domain.repository.LoginRepository
 import com.lmorda.homework.domain.model.LoginCredentials
-import timber.log.Timber
 import javax.inject.Inject
 
 class LoginUseCase @Inject constructor(

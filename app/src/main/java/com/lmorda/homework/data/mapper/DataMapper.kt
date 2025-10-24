@@ -5,6 +5,7 @@ import com.lmorda.homework.data.api.FILTER_NAME_LIKE
 import com.lmorda.homework.data.api.SORT_ASCENDING
 import com.lmorda.homework.data.api.SORT_DESCENDING
 import com.lmorda.homework.data.api.SORT_NAME
+import com.lmorda.homework.data.model.AccountsDto
 import com.lmorda.homework.data.model.CurrentLocationEntryDto
 import com.lmorda.homework.data.model.DriverDto
 import com.lmorda.homework.data.model.GeolocationDto
@@ -14,6 +15,7 @@ import com.lmorda.homework.data.model.VehicleDto
 import com.lmorda.homework.data.model.VehiclesDto
 import com.lmorda.homework.domain.filters.VehicleFilter
 import com.lmorda.homework.domain.filters.VehicleSort
+import com.lmorda.homework.domain.model.Account
 import com.lmorda.homework.domain.model.AuthToken
 import com.lmorda.homework.domain.model.CurrentLocationEntry
 import com.lmorda.homework.domain.model.Driver
@@ -122,5 +124,15 @@ class DataMapper @Inject constructor() {
             issuedAtEpochSeconds = dto.createdAt,
             ttlSeconds = dto.expiresIn
         )
+    }
+
+    fun map(dto: AccountsDto): List<Account> {
+        return dto.records.map {
+            Account(
+                id = it.id,
+                name = it.name,
+                userType = it.userType,
+            )
+        }
     }
 }
