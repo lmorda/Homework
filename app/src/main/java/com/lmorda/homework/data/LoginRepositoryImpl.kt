@@ -5,6 +5,7 @@ import com.lmorda.homework.data.api.OAuthApiService
 import com.lmorda.homework.data.api.result.safeApiCall
 import com.lmorda.homework.data.credentials.SHARED_PREF_ACCOUNT_ID
 import com.lmorda.homework.data.mapper.DataMapper
+import com.lmorda.homework.domain.credentials.TokenDataStore
 import com.lmorda.homework.domain.model.Account
 import com.lmorda.homework.domain.repository.LoginRepository
 import com.lmorda.homework.domain.model.AuthToken
@@ -17,6 +18,7 @@ class LoginRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
     private val sharedPrefs: HomeworkSharedPrefs,
     private val dataMapper: DataMapper,
+    private val tokenDataStore: TokenDataStore,
 ) : LoginRepository {
 
     override suspend fun login(credentials: LoginCredentials): AuthToken {
@@ -38,7 +40,8 @@ class LoginRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun selectAccount(id: Long) {
+    override suspend fun selectAccount(id: Long, accountToken: String) {
         sharedPrefs.putLong(key = SHARED_PREF_ACCOUNT_ID, value = id)
+        tokenDataStore.setAccountToken(token = accountToken)
     }
 }

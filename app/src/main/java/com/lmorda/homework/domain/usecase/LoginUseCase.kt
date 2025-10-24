@@ -11,8 +11,8 @@ class LoginUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(username: String, password: String) {
         try {
-            val session = loginRepository.login(LoginCredentials(username, password))
-            tokenDataStore.setToken(session.accessToken)
+            val authToken = loginRepository.login(LoginCredentials(username, password))
+            tokenDataStore.setOauthToken(authToken.accessToken)
         } catch (ex: Exception) {
             throw ex
         }

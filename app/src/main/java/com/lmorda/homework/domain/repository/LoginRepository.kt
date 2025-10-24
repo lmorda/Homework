@@ -8,6 +8,6 @@ interface LoginRepository {
 
     suspend fun login(credentials: LoginCredentials): AuthToken
     suspend fun getAccounts(): List<Account>
-    suspend fun selectAccount(id: Long)
+    suspend fun selectAccount(id: Long, accountToken: String)
 
 }

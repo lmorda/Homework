@@ -1,13 +1,12 @@
 package com.lmorda.homework.data.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.lmorda.homework.BuildConfig
 import com.lmorda.homework.data.api.ApiService
 import com.lmorda.homework.data.api.BASE_URL
 import com.lmorda.homework.data.api.CONTENT_TYPE
 import com.lmorda.homework.data.api.OAuthApiService
-import com.lmorda.homework.data.api.interceptor.AccountTokenInterceptor
-import com.lmorda.homework.data.api.interceptor.ApiKeyInterceptor
+import com.lmorda.homework.data.api.interceptor.TokenInterceptor
+import com.lmorda.homework.domain.credentials.TokenDataStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,6 +15,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Converter
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -25,46 +25,45 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder().addInterceptor(
-            interceptor = HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            })
-            .addInterceptor(
-                interceptor = AccountTokenInterceptor(
-                    accountToken = BuildConfig.ACCOUNT_TOKEN,
-                )
-            )
-            .addInterceptor(
-                interceptor = ApiKeyInterceptor(
-                    apiKey = BuildConfig.API_KEY,
-                )
-            )
-            .build()
-    }
+    fun provideKotlinxJson(): Json = Json { ignoreUnknownKeys = true }
 
     @Provides
     @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        val contentType = CONTENT_TYPE.toMediaType()
-        val json = Json { ignoreUnknownKeys = true }
+    fun provideJsonConverterFactory(json: Json): Converter.Factory =
+        json.asConverterFactory(CONTENT_TYPE.toMediaType())
 
-        return Retrofit.Builder()
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(
+        tokenDataStore: TokenDataStore
+    ): OkHttpClient =
+        OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
+            .addInterceptor(TokenInterceptor(tokenDataStore))
+            .build()
+
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(
+        okHttpClient: OkHttpClient,
+        converterFactory: Converter.Factory,
+    ): Retrofit =
+        Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(json.asConverterFactory(contentType))
+            .addConverterFactory(converterFactory)
             .build()
-    }
 
     @Provides
     @Singleton
-    fun provideApiService(retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
-    }
+    fun provideOAuthApiService(
+        retrofit: Retrofit,
+    ): OAuthApiService =
+        retrofit.create(OAuthApiService::class.java)
 
     @Provides
     @Singleton
-    fun provideOAuthApiService(retrofit: Retrofit): OAuthApiService {
-        return retrofit.create(OAuthApiService::class.java)
-    }
+    fun provideApiService(retrofit: Retrofit): ApiService =
+        retrofit.create(ApiService::class.java)
 }

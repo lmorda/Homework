@@ -1,6 +1,7 @@
 package com.lmorda.homework.ui.selectAccount
 
 import androidx.lifecycle.viewModelScope
+import com.lmorda.homework.domain.model.Account
 import com.lmorda.homework.domain.usecase.GetAccountsUseCase
 import com.lmorda.homework.domain.usecase.SelectAccountUseCase
 import com.lmorda.homework.ui.MviViewModel
@@ -32,14 +33,14 @@ class SelectAccountViewModel @Inject constructor(
         is OnAccountsLoaded -> {
             val accounts = event.accounts
             if (accounts.size == 1) {
-                selectAccount(accounts[0].id)
+                selectAccount(accounts[0])
                 state
             } else {
                 AccountsLoaded(accounts = accounts)
             }
         }
         is OnAccountSelected -> {
-            selectAccount(event.id)
+            selectAccount(event.account)
             state
         }
         is OnAccountIdSaved -> {
@@ -59,10 +60,10 @@ class SelectAccountViewModel @Inject constructor(
         }
     }
 
-    private fun selectAccount(id: Long) {
+    private fun selectAccount(account: Account) {
         viewModelScope.launch {
             try {
-                selectAccountUseCase(id = id)
+                selectAccountUseCase(id = account.id, account.token)
                 push (OnAccountIdSaved)
             } catch (ex: Exception) {
                 push (OnAccountsError)

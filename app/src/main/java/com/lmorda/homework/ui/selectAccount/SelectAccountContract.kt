@@ -24,7 +24,7 @@ interface SelectAccountContract {
 
         sealed class Internal : Event() {
             data class OnAccountSelected(
-                val id: Long,
+                val account: Account,
             ) : Internal()
         }
     }

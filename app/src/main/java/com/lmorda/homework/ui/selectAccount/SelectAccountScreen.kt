@@ -49,6 +49,7 @@ import com.lmorda.homework.ui.theme.sizeXLarge
 import com.lmorda.homework.ui.theme.topAppBarColors
 import com.lmorda.homework.R
 import com.lmorda.homework.domain.model.Account
+import com.lmorda.homework.ui.selectAccount.SelectAccountContract.Event.Internal.OnAccountSelected
 import com.lmorda.homework.ui.selectAccount.SelectAccountContract.State.AccountLoadError
 import com.lmorda.homework.ui.selectAccount.SelectAccountContract.State.AccountSelected
 import com.lmorda.homework.ui.selectAccount.SelectAccountContract.State.AccountsLoaded
@@ -169,7 +170,7 @@ fun AccountItem(
             .fillMaxWidth()
             .clickable {
                 onNavigateToExplore()
-                push(Event.Internal.OnAccountSelected(account.id))
+                push(OnAccountSelected(account = account))
             }
             .padding(vertical = 12.dp, horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -178,7 +179,7 @@ fun AccountItem(
             selected = isSelected,
             onClick = {
                 onNavigateToExplore()
-                push(Event.Internal.OnAccountSelected(account.id))
+                push(OnAccountSelected(account = account))
             }
         )
         Spacer(modifier = Modifier.width(16.dp))

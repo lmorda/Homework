@@ -4,5 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UserToken(
-    val token: String? = null
+    val oauthToken: String? = null,
+    val accountToken: String? = null,
 )

@@ -13,4 +13,7 @@ data class AccountDto(
 
     @SerialName("user_type")
     val userType: String,
+
+    @SerialName("token")
+    val token: String
 )

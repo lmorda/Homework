@@ -21,13 +21,25 @@ class TokenDataStoreImpl @Inject constructor(
 
     private val store = context.userTokenDataStore
 
-    override suspend fun getToken(): String? = store.data.first().token
+    override suspend fun getOauthToken(): String? =
+        store.data.first().oauthToken
 
-    override suspend fun setToken(token: String?) {
-        store.updateData { it.copy(token = token) }
+    override suspend fun setOauthToken(token: String?) {
+        store.updateData { it.copy(oauthToken = token?.trim()) }
     }
 
-    override suspend fun clearToken() {
-        store.updateData { UserToken() }
+    override suspend fun getAccountToken(): String? =
+        store.data.first().accountToken
+
+    override suspend fun setAccountToken(token: String?) {
+        store.updateData { it.copy(accountToken = token?.trim()) }
+    }
+
+    override suspend fun clearOauthToken() {
+        store.updateData { it.copy(oauthToken = null) }
+    }
+
+    override suspend fun clearAccountToken() {
+        store.updateData { it.copy(accountToken = null) }
     }
 }

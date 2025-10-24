@@ -132,6 +132,7 @@ class DataMapper @Inject constructor() {
                 id = it.id,
                 name = it.name,
                 userType = it.userType,
+                token = it.token,
             )
         }
     }

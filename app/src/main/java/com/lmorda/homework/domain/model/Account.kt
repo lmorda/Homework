@@ -4,4 +4,5 @@ data class Account(
     val id: Long,
     val name: String,
     val userType: String,
+    val token: String,
 )

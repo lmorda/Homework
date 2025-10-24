@@ -7,7 +7,7 @@ class SelectAccountUseCase @Inject constructor(
     private val loginRepository: LoginRepository,
 ) {
 
-    suspend operator fun invoke(id: Long) {
-        loginRepository.selectAccount(id = id)
+    suspend operator fun invoke(id: Long, accountToken: String) {
+        loginRepository.selectAccount(id = id, accountToken = accountToken)
     }
 }
