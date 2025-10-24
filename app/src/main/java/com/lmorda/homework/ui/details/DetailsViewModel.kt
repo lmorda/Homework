@@ -9,6 +9,9 @@ import com.lmorda.homework.ui.details.DetailsContract.Event.Internal.OnLoadError
 import com.lmorda.homework.ui.details.DetailsContract.Event.Internal.OnLoaded
 import com.lmorda.homework.ui.details.DetailsContract.Event.OnLoadDetails
 import com.lmorda.homework.ui.details.DetailsContract.State
+import com.lmorda.homework.ui.details.DetailsContract.State.LoadError
+import com.lmorda.homework.ui.details.DetailsContract.State.Loaded
+import com.lmorda.homework.ui.details.DetailsContract.State.Loading
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,11 +31,11 @@ class DetailsViewModel @Inject constructor(
     override fun reduce(state: State, event: Event): State = when (event) {
         is OnLoadDetails -> {
             id?.let { getVehicle(id = it) }
-            State.Loading
+            Loading
         }
 
-        is OnLoaded -> State.Loaded(vehicle = event.vehicle)
-        is OnLoadError -> State.LoadError(errorMessage = event.errorMessage)
+        is OnLoaded -> Loaded(vehicle = event.vehicle)
+        is OnLoadError -> LoadError(errorMessage = event.errorMessage)
     }
 
     private fun getVehicle(id: Long) {
