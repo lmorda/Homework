@@ -66,7 +66,6 @@ class ExploreViewModelTest {
         } returns flowOf(true)
 
         viewModel = ExploreViewModel(
-            dataRepository = dataRepository,
             featureFlagRepository = featureFlagRepository,
             getVehiclePageUseCase = getVehiclePageUseCase,
         )
